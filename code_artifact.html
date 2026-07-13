@@ -93,8 +93,11 @@
 </head>
 <body class="min-h-screen py-4 px-2 md:py-12 flex items-center justify-center bg-[#FFFDF7] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
 
+    <!-- Background subtle particles canvas -->
+    <canvas id="bg-particles" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
     <!-- Main Cyworld Board Outer Wrapper -->
-    <div class="w-full max-w-6xl bg-[#8EC5FC] dark:bg-slate-800 p-3 md:p-6 rounded-3xl border-4 border-slate-700 dark:border-slate-600 shadow-[8px_8px_0px_#333] dark:shadow-[8px_8px_0px_#1e293b] relative transition-colors duration-300">
+    <div class="relative z-10 w-full max-w-6xl bg-[#8EC5FC] dark:bg-slate-800 p-3 md:p-6 rounded-3xl border-4 border-slate-700 dark:border-slate-600 shadow-[8px_8px_0px_#333] dark:shadow-[8px_8px_0px_#1e293b] relative transition-colors duration-300">
         
         <!-- Retro Dot Matrix Design at the border of the notebook -->
         <div class="absolute top-4 left-4 right-4 h-2 flex justify-between px-4 opacity-50 pointer-events-none">
@@ -802,7 +805,82 @@
             initVisitorCounter();
             loadComments();
             switchAIMode('chat'); // Initialize AI screen with chat mode
+            initBgParticles();   // Start subtle background particles
         };
+
+        // Subtle background particles logic
+        function initBgParticles() {
+            const canvas = document.getElementById('bg-particles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            let particles = [];
+            let animationFrameId;
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                createParticles();
+            }
+            
+            class Particle {
+                constructor() {
+                    this.reset(true);
+                }
+                
+                reset(init = false) {
+                    this.x = Math.random() * canvas.width;
+                    this.y = init ? Math.random() * canvas.height : canvas.height + 10;
+                    this.size = Math.random() * 1.8 + 0.6; // 0.6px ~ 2.4px very tiny dots
+                    this.speedY = -(Math.random() * 0.25 + 0.08); // Slow upward drift
+                    this.speedX = (Math.random() * 0.15 - 0.075);  // Very slight horizontal drift
+                    this.alpha = Math.random() * 0.22 + 0.08;    // Very low, subtle opacity
+                }
+                
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    
+                    // Reset when off-screen
+                    if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
+                        this.reset(false);
+                    }
+                }
+                
+                draw() {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    // Gently adjust particle color based on current mode
+                    ctx.fillStyle = isDark 
+                        ? `rgba(224, 242, 254, ${this.alpha})`      // Sky-100 (soft white-blue) in dark mode
+                        : `rgba(14, 116, 144, ${this.alpha * 0.65})`; // Cyan-700 in light mode
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            function createParticles() {
+                particles = [];
+                // Dynamic density based on screen width (fewer on mobile)
+                const particleCount = Math.floor(Math.min(50, window.innerWidth / 22));
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                animationFrameId = requestAnimationFrame(animate);
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            animate();
+        }
 
         // Switch between chat and question murderer modes
         function switchAIMode(mode) {
