@@ -96,6 +96,26 @@
     <!-- Background subtle particles canvas -->
     <canvas id="bg-particles" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
+    <!-- VERTICAL SQUARE SCROLL PROGRESS GAUGE (Top-Right) -->
+    <div class="fixed right-2 md:right-4 top-28 z-50 flex flex-col items-center bg-white/95 dark:bg-slate-900/95 p-1.5 md:p-2 rounded-xl border-2 border-slate-700 dark:border-slate-600 shadow-lg w-10 md:w-11 h-48 md:h-56 justify-between font-retro select-none transition-colors duration-300">
+        <span class="text-[8px] md:text-[9px] text-slate-400 dark:text-slate-500 font-bold">GOAL</span>
+        <span class="text-xs md:text-sm">🏁</span>
+        
+        <!-- Track container -->
+        <div class="relative w-2 md:w-2.5 h-24 md:h-32 bg-slate-200 dark:bg-slate-800 rounded-full overflow-visible border border-slate-300 dark:border-slate-700">
+            <!-- Progress fill inside track -->
+            <div id="scroll-fill" class="absolute top-0 left-0 w-full bg-[#FFD966] dark:bg-amber-500 rounded-full" style="height: 0%;"></div>
+            
+            <!-- Running boy indicator -->
+            <div id="scroll-runner" class="absolute" style="top: 0%; left: 50%; transform: translate(-50%, -50%); transition: top 0.05s linear;">
+                <span class="text-base md:text-lg filter drop-shadow">🏃‍♂️</span>
+            </div>
+        </div>
+        
+        <span class="text-xs md:text-sm">🚩</span>
+        <span class="text-[8px] md:text-[9px] text-slate-400 dark:text-slate-500 font-bold">START</span>
+    </div>
+
     <!-- Main Cyworld Board Outer Wrapper -->
     <div class="relative z-10 w-full max-w-6xl bg-[#8EC5FC] dark:bg-slate-800 p-3 md:p-6 rounded-3xl border-4 border-slate-700 dark:border-slate-600 shadow-[8px_8px_0px_#333] dark:shadow-[8px_8px_0px_#1e293b] relative transition-colors duration-300">
         
@@ -171,7 +191,7 @@
                         <div class="my-4 py-3 border-y-2 border-dashed border-slate-200 dark:border-slate-700">
                             <p class="text-xs text-slate-500 dark:text-slate-400 font-retro mb-1">Status Message</p>
                             <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                "가끔씩 물음표 살인마가 됩니다🔪"
+                                "가끔씩 물음표 살인마가 되🔪"
                             </p>
                         </div>
 
@@ -336,8 +356,7 @@
                         <div class="mt-6 p-4 md:p-6 bg-gradient-to-r from-yellow-100 via-sky-100 to-indigo-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center transition-colors duration-300">
                             <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-retro mb-2">My Final Destination</p>
                             <h3 class="text-lg md:text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-normal">
-                                "행복한 사회를 만들고 싶은 <br class="md:hidden">
-                                <span class="bg-white/80 dark:bg-slate-900/80 px-2 rounded-lg py-1 shadow-sm border border-slate-200 dark:border-slate-700">🌟 멋진 사업가 🌟</span>"
+                                행복한 사회를 만들고 싶은 사업가
                             </h3>
                             <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 mt-4 font-retro">기술과 따뜻한 영향력으로 세상을 조금 더 밝게 물들이겠습니다.</p>
                         </div>
@@ -355,7 +374,7 @@
                                 <div>
                                     <span class="text-4xl">💣</span>
                                     <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">크아 레벨 260</h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Crazyarcade 고인물의 품격, 물풍선 마스터 클래스</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Crazyarcade 고인물의 품격,물풍선 마스터 클래스</p>
                                 </div>
                                 <div class="mt-4">
                                     <span class="text-[10px] bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 px-2 py-1 rounded font-bold">LEGENDARY</span>
@@ -377,21 +396,17 @@
                                 </div>
                             </div>
 
-                            <!-- Achievement 3: Gukbap stacking game -->
-                            <div id="gukbap-card" class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200 relative overflow-hidden select-none cursor-pointer" onclick="stackGukbap()">
+                            <!-- Achievement 3: LOL Zilean Master -->
+                            <div class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
                                 <div>
-                                    <span class="text-4xl">🍲</span>
-                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">국밥에 밥 3공기 말기</h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">끝까지 식지 않는 열정으로 국밥 3공기를 뚝딱 해치웁니다!</p>
+                                    <span class="text-4xl">⏰</span>
+                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">LOL 질리언 장인</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">단일챔프로 플레티넘 까지</p>
                                 </div>
-                                <!-- Stacking bowls interactive graphics inside card -->
-                                <div class="mt-4 flex flex-col items-center">
-                                    <div class="flex justify-center flex-wrap gap-1 max-w-full -space-x-1 mb-1" id="bowls-container">
-                                        <span class="text-lg">🍚</span>
-                                        <span class="text-lg">🍚</span>
-                                        <span class="text-lg">🍚</span>
-                                    </div>
-                                    <span class="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-1 rounded font-bold">CLICK TO EAT MORE!</span>
+                                <div class="mt-4">
+                                    <span class="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2.5 py-1 rounded font-bold leading-none">
+                                        (지금은 안함..)
+                                    </span>
                                 </div>
                             </div>
 
@@ -702,19 +717,19 @@
             name: "김동민 (영어이름: dodo, 닉네임: dodoking)",
             location: "광주광역시 (전남 광주)",
             mbti: "ENFJ에서 최근 INFJ로 변모 (사색과 성찰을 좋아하는 유형)",
-            statusMessage: "가끔씩 물음표 살인마가 됩니다 ❓🔪 (궁금한 것은 끝까지 알아내야 함)",
+            statusMessage: "가끔씩 물음표 살인마가 되 ❓🔪 (궁금한 것은 끝까지 알아내야 함)",
             skills: [
                 "AutoCAD (건축 도면 설계 및 신속한 수정 전문가)",
                 "BIM (3D, 4D 모델링 및 풍부한 건축 정보 데이터 통합 마스터)",
                 "CapCut (영상 편집, 최대 95만뷰 숏폼 조회수를 기록한 트렌디한 콘텐츠 제작)",
                 "Photoshop (이미지 합성, 드로잉, 정밀 보정 작업 가능)",
-                "PowerPoint (깔끔하고 직관적인 프레젠테이션 디자인 및 기획 문서 작성 마스터)"
+                "PowerPoint (기획 및 프리젠테이션 디자인 마스터)"
             ],
-            goal: "기술과 따뜻한 영향력으로 세상을 밝히는, 행복한 사회를 만들고 싶은 멋진 사업가 🌟",
+            goal: "행복한 사회를 만들고 싶은 사업가",
             achievements: [
                 "크레이지아케이드 레벨 260 달성 (고인물 중의 고인물)",
                 "CapCut 숏폼 최대 조회수 95만회 기록 (누군가 숏폼을 찾아내면 선물 증정 예정)",
-                "국밥에 밥 3공기 순식간에 말아먹을 수 있는 엄청난 식성과 열정"
+                "LOL 질리언 장인 (단일챔프로 플레티넘까지 달성했으나 지금은 안함)"
             ],
             favorites: {
                 chickenBrands: ["교촌치킨 레드콤보", "BBQ 황금올리브", "굽네치킨 고추바사삭", "멕시칸 닭강정"],
@@ -806,7 +821,53 @@
             loadComments();
             switchAIMode('chat'); // Initialize AI screen with chat mode
             initBgParticles();   // Start subtle background particles
+            initScrollIndicator(); // Start scroll progress gauge tracking
         };
+
+        // Responsive scroll progress gauge controller
+        function initScrollIndicator() {
+            const runner = document.getElementById('scroll-runner');
+            const fill = document.getElementById('scroll-fill');
+            const container = document.getElementById('main-scroll-container');
+            
+            function updateScroll() {
+                if (!runner || !fill) return;
+                
+                let percentage = 0;
+                // Desktop mode: Only the right side scroll container is scrollable
+                if (window.innerWidth >= 1024 && container) {
+                    const scrollTop = container.scrollTop;
+                    const scrollHeight = container.scrollHeight - container.clientHeight;
+                    if (scrollHeight > 0) {
+                        percentage = (scrollTop / scrollHeight) * 100;
+                    }
+                } else {
+                    // Mobile/Tablet mode: The entire document scrolls
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    if (scrollHeight > 0) {
+                        percentage = (scrollTop / scrollHeight) * 100;
+                    }
+                }
+                
+                // Safe clamps
+                percentage = Math.max(0, Math.min(100, percentage));
+                
+                // Animate running child position along track
+                runner.style.top = `${percentage}%`;
+                fill.style.height = `${percentage}%`;
+            }
+
+            // Attach scroll listeners to both potential areas
+            window.addEventListener('scroll', updateScroll, { passive: true });
+            window.addEventListener('resize', updateScroll, { passive: true });
+            if (container) {
+                container.addEventListener('scroll', updateScroll, { passive: true });
+            }
+            
+            // Call once initially
+            setTimeout(updateScroll, 100);
+        }
 
         // Subtle background particles logic
         function initBgParticles() {
@@ -894,7 +955,7 @@
 
             // Toggle CSS classes for active tabs
             if (mode === 'chat') {
-                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#EBF5FF] dark:bg-sky-950 text-slate-800 dark:text-slate-100 font-bold shadow-[2px_2px_0px_#333] dark:shadow-[2px_2px_0px_#1e293b] transition-all";
+                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#EBF5FF] dark:bg-sky-950 text-slate-800 dark:text-slate-100 font-bold shadow-[2px_2px_0px_#333] transition-all";
                 murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFFDF7] dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
                 screenTitle.textContent = "DODO_AVATAR_CHAT.exe";
                 statusBadge.textContent = "BUDDY";
@@ -906,12 +967,12 @@
                         <span class="text-lg">🤖</span>
                         <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 max-w-[85%] text-slate-100">
                             안녕하삼! 난 도도킹의 미니룸 수호 인형 dodo_bot이라능! 🐾<br>
-                            동민이의 크아 실력, 싸피 합격 비화, 요리 실력, 치킨 취향 등 뭐든지 물어보삼! 반갑다능! 😉
+                            동민이의 크아 실력, 싸피 합격 비화, 요리 실력, 치킨 취향, 파워포인트 활용법 등 뭐든지 물어보삼! 반갑다능! 😉
                         </div>
                     </div>
                 `;
             } else {
-                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 font-bold shadow-[2px_2px_0px_#333] dark:shadow-[2px_2px_0px_#1e293b] transition-all";
+                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 font-bold shadow-[2px_2px_0px_#333] transition-all";
                 chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFFDF7] dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
                 screenTitle.textContent = "QUESTION_MURDERER_MODE.bat";
                 statusBadge.textContent = "DANGER";
