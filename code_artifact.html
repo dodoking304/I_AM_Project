@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dodoking's Miniroom 🐾</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Web Fonts for Retro Pixel vibe and clean body text -->
+    <link href="https://fonts.googleapis.com/css2?family=DungGeunMo&family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #FFFDF7; /* 크림 화이트 */
+            background-image: radial-gradient(#A8D8FF 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .font-retro {
+            font-family: 'DungGeunMo', monospace;
+        }
+
+        /* Cyworld notebook binder effect */
+        .binder-ring {
+            background: linear-gradient(to bottom, #ccc 30%, #999 50%, #ccc 70%);
+            border-radius: 4px;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* Custom scrollbar for classic look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFFDF7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #A8D8FF;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #86C7FF;
+        }
+
+        /* CD spinning animation for BGM Player */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin 6s linear infinite;
+        }
+
+        /* Pixels borders */
+        .pixel-border {
+            border: 4px solid #333;
+            box-shadow: 4px 4px 0px #333;
+        }
+        .pixel-border-sm {
+            border: 2px solid #333;
+            box-shadow: 2px 2px 0px #333;
+        }
+
+        /* Custom transitions */
+        .tab-btn-active {
+            background-color: #A8D8FF !important;
+            color: #333 !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 px-4 md:py-12 flex items-center justify-center">
+
+    <!-- Main Cyworld Board Outer Wrapper -->
+    <div class="w-full max-w-6xl bg-[#8EC5FC] p-4 md:p-6 rounded-3xl border-4 border-slate-700 shadow-[8px_8px_0px_#333] relative">
+        
+        <!-- Retro Dot Matrix Design at the border of the notebook -->
+        <div class="absolute top-4 left-4 right-4 h-2 flex justify-between px-4 opacity-50 pointer-events-none">
+            <span class="w-2 h-2 bg-white rounded-full"></span>
+            <span class="w-2 h-2 bg-white rounded-full"></span>
+            <span class="w-2 h-2 bg-white rounded-full"></span>
+        </div>
+
+        <!-- Inner Notebook Layout -->
+        <div class="bg-[#EBF5FF] rounded-2xl border-4 border-dashed border-white p-2 md:p-4">
+            
+            <!-- Top Dashboard: Visitor Counter, Mini-homepage Title & BGM Indicator -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4 pb-3 border-b-2 border-[#A8D8FF] font-retro text-slate-700 text-xs md:text-sm gap-2">
+                <div class="flex items-center gap-4">
+                    <span class="bg-[#FFD966] text-slate-800 px-3 py-1 rounded-full font-bold pixel-border-sm">
+                        TODAY <span class="text-rose-500" id="today-count">127</span> 
+                        | TOTAL <span id="total-count">10426</span>
+                    </span>
+                    <span class="hidden md:inline text-slate-600">🐾 dodoking님의 미니홈피에 오신 것을 환영합니다!</span>
+                </div>
+                
+                <!-- Retro BGM simulated player -->
+                <div class="flex items-center bg-white p-2 rounded-lg border-2 border-slate-400 gap-3 max-w-xs shadow-inner">
+                    <div class="relative w-8 h-8 flex-shrink-0">
+                        <div id="bgm-cd" class="w-full h-full bg-[#333] rounded-full flex items-center justify-center text-[8px] text-white font-bold animate-spin-slow">
+                            🎵
+                        </div>
+                    </div>
+                    <div class="text-left leading-tight overflow-hidden">
+                        <p class="font-bold text-slate-800 text-[11px] truncate">민들레 (Dandelion)</p>
+                        <p class="text-[10px] text-slate-500 truncate">우효 (OOHYO)</p>
+                    </div>
+                    <button onclick="toggleBGM()" class="text-slate-600 hover:text-slate-900 transition ml-1 p-1">
+                        <i id="bgm-play-btn" class="fa-solid fa-pause"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Area: Left Profile Column & Right Scrollable Feed -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                <!-- LEFT COLUMN: Profile info, quick links, MBTI & music player visual -->
+                <div class="lg:col-span-1 bg-white p-4 rounded-xl border-4 border-slate-700 flex flex-col justify-between shadow-[4px_4px_0px_rgba(0,0,0,0.15)]">
+                    <div>
+                        <!-- Simulated Cyworld Avatar Area -->
+                        <div class="w-full bg-[#F4F4F4] aspect-square rounded-lg border-2 border-slate-300 flex items-center justify-center relative overflow-hidden group">
+                            <!-- User-provided Miniroom Screenshot as Avatar -->
+                            <img src="스크린샷 2026-07-13 105638.png" alt="dodoking's Miniroom" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://placehold.co/300x300/e0f2fe/0284c7?text=Miniroom'">
+                            
+                            <!-- Pixel Tag -->
+                            <div class="absolute bottom-2 left-2 bg-slate-800/90 text-white text-[10px] px-2 py-0.5 rounded font-retro border border-slate-600">
+                                dodoking 🐾
+                            </div>
+                            
+                            <!-- Active Status Dot -->
+                            <div class="absolute top-2 right-2 flex gap-1">
+                                <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-green-500 absolute"></span>
+                            </div>
+                        </div>
+
+                        <!-- Profile Text / Status Msg -->
+                        <div class="my-4 py-3 border-y-2 border-dashed border-slate-200">
+                            <p class="text-xs text-slate-500 font-retro mb-1">Status Message</p>
+                            <p class="text-sm font-semibold text-slate-700">
+                                "가끔씩 물음표 살인마가 됩니다 ❓🔪"
+                            </p>
+                        </div>
+
+                        <!-- Mini Info Table -->
+                        <div class="space-y-2 text-xs text-slate-600 font-retro">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">이름</span>
+                                <span class="font-bold text-slate-800">김동민 (dodo)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">거주지</span>
+                                <span class="text-slate-800 font-bold"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>광주광역시</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">MBTI</span>
+                                <span class="bg-[#A8D8FF] px-1.5 py-0.5 rounded text-slate-800 font-bold">INFJ <span class="text-[10px] text-slate-500 font-normal">(ENFJ였음)</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Left Column Footer Quick Contacts -->
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <h4 class="text-xs font-retro text-slate-400 mb-2">QUICK LINK</h4>
+                        <div class="flex justify-around text-slate-600">
+                            <a href="mailto:dodoking99@naver.com" class="hover:text-[#A8D8FF] transition text-lg" title="이메일 보내기">
+                                <i class="fa-solid fa-envelope"></i>
+                            </a>
+                            <a href="#contact" class="hover:text-[#A8D8FF] transition text-lg" title="연락처">
+                                <i class="fa-solid fa-phone"></i>
+                            </a>
+                            <a href="#guestbook" class="hover:text-[#A8D8FF] transition text-lg" title="방명록 바로가기">
+                                <i class="fa-solid fa-book"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: Continuous Scrolling Sections -->
+                <div class="lg:col-span-3 space-y-8 h-[75vh] overflow-y-auto pr-2" id="main-scroll-container">
+                    
+                    <!-- 1. INTRO (히어로) -->
+                    <section id="intro" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            1. Intro ✨
+                        </span>
+                        <div class="mt-6 text-center py-8 bg-gradient-to-br from-[#FFFDF7] to-[#EBF5FF] rounded-lg border-2 border-slate-300 relative overflow-hidden">
+                            <div class="absolute -top-10 -left-10 w-32 h-32 bg-[#A8D8FF] rounded-full opacity-30 blur-xl"></div>
+                            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-[#FFD966] rounded-full opacity-30 blur-xl"></div>
+                            
+                            <h2 class="font-retro text-2xl md:text-3xl font-extrabold text-slate-800 mb-4 tracking-wider leading-relaxed">
+                                안녕하세요!<br>
+                                <span class="bg-[#A8D8FF] px-2">김동민</span> 입니다.<br>
+                                영어 이름은 <span class="bg-[#FFD966] px-2">dodo</span> 입니다!
+                            </h2>
+                            <p class="text-slate-500 font-retro text-sm">#직관적인 #심플한 #개성있는 😉</p>
+                        </div>
+                    </section>
+
+                    <!-- 2. ABOUT ME -->
+                    <section id="about" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            2. About Me 🐾
+                        </span>
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Left: Card with bio details -->
+                            <div class="bg-[#FFFDF7] p-4 rounded-lg border-2 border-slate-300 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="font-retro font-bold text-slate-700 border-b pb-2 mb-3"><i class="fa-solid fa-id-card mr-2 text-sky-500"></i>기본 프로필</h3>
+                                    <ul class="space-y-3 text-sm text-slate-600">
+                                        <li><strong>닉네임:</strong> <span class="bg-amber-100 px-1 py-0.5 rounded">dodoking</span></li>
+                                        <li><strong>거주지역:</strong> 전남 광주광역시</li>
+                                        <li><strong>특징:</strong> 질문이 너무 많아 <span class="text-rose-500 font-semibold">"물음표 살인마"</span>가 되는 매력 소유자 ❓</li>
+                                    </ul>
+                                </div>
+                                <div class="mt-4 p-2 bg-yellow-50 rounded text-xs text-amber-800 border border-amber-200">
+                                    💡 "궁금한 건 참을 수 없어요! 항상 원리를 파고듭니다."
+                                </div>
+                            </div>
+
+                            <!-- Right: Custom Styled Cyworld Room representation -->
+                            <div class="bg-[#EBF5FF] p-4 rounded-lg border-2 border-slate-300 flex flex-col justify-center items-center relative overflow-hidden min-h-[200px]">
+                                <div class="text-center z-10">
+                                    <!-- A funny pixel-like graphic/art representation of Gwangju dodoking -->
+                                    <div class="text-5xl mb-3 animate-bounce">🏡</div>
+                                    <h4 class="font-retro text-xs text-slate-500 uppercase tracking-widest">dodoking's Miniroom</h4>
+                                    <p class="text-xs text-slate-600 mt-1">광주에 거주하는 물음표 가득한 dodo방</p>
+                                </div>
+                                <!-- Floating question marks -->
+                                <span class="absolute top-4 left-6 text-2xl text-sky-400 opacity-40 animate-pulse">?</span>
+                                <span class="absolute bottom-6 right-8 text-3xl text-yellow-400 opacity-40 animate-pulse delay-75">?</span>
+                                <span class="absolute top-1/2 left-3/4 text-xl text-indigo-400 opacity-30 animate-pulse delay-150">?</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. SKILLS -->
+                    <section id="skills" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            3. Skills 🛠️
+                        </span>
+                        <div class="mt-6 space-y-4">
+                            <p class="text-sm text-slate-500 font-retro mb-4">제가 다룰 수 있는 멋진 프로그램들과 활용 수준입니다.</p>
+                            
+                            <!-- Skill 1 -->
+                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-slate-800">AutoCAD 📐</span>
+                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">건축 도면 전문가</span>
+                                </div>
+                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                    <div class="bg-[#A8D8FF] h-full rounded-full transition-all duration-1000" style="width: 85%;"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">건축 도면 작성 및 신속한 설계 수정이 가능합니다.</p>
+                            </div>
+
+                            <!-- Skill 2 -->
+                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-slate-800">BIM 🏗️</span>
+                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">3D/4D 모델링 마스터</span>
+                                </div>
+                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                    <div class="bg-[#FFD966] h-full rounded-full transition-all duration-1000" style="width: 80%;"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">3D/4D 모델링 및 풍부한 건축 정보 데이터 통합 관리.</p>
+                            </div>
+
+                            <!-- Skill 3 -->
+                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-slate-800">CapCut 🎥</span>
+                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">숏폼 크리에이터</span>
+                                </div>
+                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                    <div class="bg-emerald-300 h-full rounded-full transition-all duration-1000" style="width: 90%;"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">감각적인 영상 편집 및 고성과 숏폼 콘텐츠 제작.</p>
+                            </div>
+
+                            <!-- Skill 4 -->
+                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-slate-800">Photoshop 🎨</span>
+                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">디지털 드로잉 & 보정</span>
+                                </div>
+                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                    <div class="bg-rose-300 h-full rounded-full transition-all duration-1000" style="width: 75%;"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">자유로운 이미지 편집 및 합성, 정밀 보정 작업 가능.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 4. GOAL -->
+                    <section id="goal" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            4. Goal 🚀
+                        </span>
+                        <div class="mt-6 p-6 bg-gradient-to-r from-yellow-100 via-sky-100 to-indigo-100 rounded-lg border-2 border-slate-300 text-center">
+                            <p class="text-xs text-slate-500 uppercase tracking-widest font-retro mb-2">My Final Destination</p>
+                            <h3 class="text-xl md:text-2xl font-extrabold text-slate-800 leading-normal">
+                                "행복한 사회를 만들고 싶은 <br class="md:hidden">
+                                <span class="bg-white/80 px-2 rounded-lg py-1 shadow-sm border border-slate-200">🌟 멋진 사업가 🌟</span>"
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-4 font-retro">기술과 따뜻한 영향력으로 세상을 조금 더 밝게 물들이겠습니다.</p>
+                        </div>
+                    </section>
+
+                    <!-- 5. ACHIEVEMENTS (나의 업적) -->
+                    <section id="achievements" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            5. Achievements 🏆
+                        </span>
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            
+                            <!-- Achievement 1: Crazyarcade -->
+                            <div class="p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
+                                <div>
+                                    <span class="text-4xl">💣</span>
+                                    <h4 class="font-retro font-bold text-slate-800 mt-2">크아 레벨 260</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Crazyarcade 고인물의 품격, 물풍선 마스터 클래스</p>
+                                </div>
+                                <div class="mt-4">
+                                    <span class="text-[10px] bg-sky-100 text-sky-800 px-2 py-1 rounded font-bold">LEGENDARY</span>
+                                </div>
+                            </div>
+
+                            <!-- Achievement 2: Shorts View count -->
+                            <div class="p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
+                                <div>
+                                    <span class="text-4xl">🔥</span>
+                                    <h4 class="font-retro font-bold text-slate-800 mt-2">숏폼 최대 95만뷰</h4>
+                                    <p class="text-xs text-slate-500 mt-1">CapCut을 이용한 트렌디한 편집으로 달성한 엄청난 도달율</p>
+                                </div>
+                                <div class="mt-4">
+                                    <span class="text-[10px] bg-red-100 text-red-800 px-2 py-1 rounded font-bold">POPULAR</span>
+                                </div>
+                            </div>
+
+                            <!-- Achievement 3: Gukbap stacking game -->
+                            <div id="gukbap-card" class="p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200 relative overflow-hidden select-none cursor-pointer" onclick="stackGukbap()">
+                                <div>
+                                    <span class="text-4xl">🍲</span>
+                                    <h4 class="font-retro font-bold text-slate-800 mt-2">국밥에 밥 3공기 말기</h4>
+                                    <p class="text-xs text-slate-500 mt-1">끝까지 식지 않는 열정으로 국밥 3공기를 뚝딱 해치웁니다!</p>
+                                </div>
+                                <!-- Stacking bowls interactive graphics inside card -->
+                                <div class="mt-4 flex flex-col items-center">
+                                    <div class="flex justify-center -space-x-1 mb-1" id="bowls-container">
+                                        <span class="text-lg">🍚</span>
+                                        <span class="text-lg">🍚</span>
+                                        <span class="text-lg">🍚</span>
+                                    </div>
+                                    <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-1 rounded font-bold">CLICK TO EAT MORE!</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <!-- 6. FAVORITE & HATE -->
+                    <section id="favorite" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            6. Taste / Likes & Dislikes 🍕
+                        </span>
+                        <div class="mt-6 space-y-6">
+                            
+                            <!-- Chicken Section (The ultimate love) -->
+                            <div>
+                                <h3 class="font-retro font-bold text-slate-700 border-b pb-2 mb-4 flex items-center justify-between">
+                                    <span>🍗 치킨 취향 분석 (Brand & Menu)</span>
+                                    <span class="text-xs text-[#A8D8FF] font-bold">1순위 최애식품</span>
+                                </h3>
+                                
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <!-- Kyochon -->
+                                    <div class="bg-stone-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
+                                        <div class="w-12 h-12 mx-auto bg-stone-800 text-amber-400 font-bold text-[10px] flex items-center justify-center rounded-full border-2 border-stone-600 mb-2">교촌</div>
+                                        <h4 class="font-bold text-xs text-slate-800">레드콤보</h4>
+                                        <p class="text-[10px] text-rose-500 font-semibold mt-1">매콤바삭 원조</p>
+                                    </div>
+                                    <!-- BBQ -->
+                                    <div class="bg-amber-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
+                                        <div class="w-12 h-12 mx-auto bg-amber-500 text-white font-bold text-xs flex items-center justify-center rounded-full border-2 border-amber-600 mb-2">BBQ</div>
+                                        <h4 class="font-bold text-xs text-slate-800">황금올리브</h4>
+                                        <p class="text-[10px] text-amber-600 font-semibold mt-1">후라이드의 정석</p>
+                                    </div>
+                                    <!-- Goobne -->
+                                    <div class="bg-orange-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
+                                        <div class="w-12 h-12 mx-auto bg-orange-600 text-white font-bold text-xs flex items-center justify-center rounded-full border-2 border-orange-700 mb-2">굽네</div>
+                                        <h4 class="font-bold text-xs text-slate-800">고추바사삭</h4>
+                                        <p class="text-[10px] text-orange-600 font-semibold mt-1">오븐구이 끝판왕</p>
+                                    </div>
+                                    <!-- Mexican -->
+                                    <div class="bg-red-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
+                                        <div class="w-12 h-12 mx-auto bg-red-600 text-white font-bold text-[10px] flex items-center justify-center rounded-full border-2 border-red-700 mb-2">멕시칸</div>
+                                        <h4 class="font-bold text-xs text-slate-800">닭강정</h4>
+                                        <p class="text-[10px] text-red-500 font-semibold mt-1">달콤바삭 양념</p>
+                                    </div>
+                                </div>
+
+                                <!-- Chicken Sub-Brands Toggle -->
+                                <div class="mt-4 bg-[#FFFDF7] p-3 rounded-lg border border-slate-300">
+                                    <p class="text-xs text-slate-600"><strong class="text-amber-600">➕ 추가 선호 브랜드:</strong> 자담치킨, 오빠통닭, 다사랑치킨</p>
+                                </div>
+                            </div>
+
+                            <!-- Dislikes & Details -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-red-50 p-4 rounded-lg border-2 border-rose-300">
+                                    <h4 class="font-retro font-bold text-rose-800 mb-2"><i class="fa-solid fa-circle-xmark mr-1"></i> 절대 금지 음식</h4>
+                                    <p class="text-sm text-rose-700">올리브 🫒, 할라피뇨 🌶️</p>
+                                    <p class="text-[11px] text-rose-500 mt-1">피자 먹을 때 일일이 빼고 먹는 고난을 겪습니다.</p>
+                                </div>
+                                <div class="bg-sky-50 p-4 rounded-lg border-2 border-sky-300 flex flex-col justify-between">
+                                    <div>
+                                        <h4 class="font-retro font-bold text-sky-800 mb-2"><i class="fa-solid fa-music mr-1"></i> 음악 취향</h4>
+                                        <p class="text-sm text-sky-700 font-bold">우효 (OOHYO) - 민들레 🌼</p>
+                                    </div>
+                                    <p class="text-[11px] text-sky-500 mt-2">감성 촉촉하고 잔잔한 인디음악을 좋아합니다.</p>
+                                </div>
+                            </div>
+
+                            <!-- Talents -->
+                            <div class="bg-[#FFFDF7] p-4 rounded-lg border-2 border-slate-300">
+                                <h4 class="font-retro font-bold text-slate-700 mb-3"><i class="fa-solid fa-star text-yellow-400 mr-2"></i>제가 잘하는 소중한 장기들</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div class="p-2.5 bg-white rounded border border-slate-200 text-center">
+                                        <span class="text-2xl">🍳</span>
+                                        <p class="font-bold text-xs mt-1 text-slate-700">요리</p>
+                                        <p class="text-[10px] text-slate-500">취사병 출신, 한식조리기능사 보유!</p>
+                                    </div>
+                                    <div class="p-2.5 bg-white rounded border border-slate-200 text-center">
+                                        <span class="text-2xl">🇨🇳</span>
+                                        <p class="font-bold text-xs mt-1 text-slate-700">중국어</p>
+                                        <p class="text-[10px] text-slate-500">HSK 공식 자격증 보유!</p>
+                                    </div>
+                                    <div class="p-2.5 bg-white rounded border border-slate-200 text-center">
+                                        <span class="text-2xl">💪</span>
+                                        <p class="font-bold text-xs mt-1 text-slate-700">턱걸이</p>
+                                        <p class="text-[10px] text-slate-500">탄탄한 상체 단련 맨몸운동</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <!-- 7. PERSONALITY -->
+                    <section id="personality" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            7. Personality 🤫
+                        </span>
+                        <div class="mt-6 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- MBTI Conversion interactive board -->
+                                <div class="p-4 bg-indigo-50 rounded-lg border-2 border-indigo-200 text-center relative overflow-hidden">
+                                    <span class="text-xs text-indigo-400 font-retro">MBTI SHIFT</span>
+                                    <div class="flex items-center justify-center gap-4 my-2">
+                                        <span class="text-lg text-indigo-600 line-through">ENFJ</span>
+                                        <span class="text-xl font-extrabold text-indigo-800">👉 INFJ</span>
+                                    </div>
+                                    <p class="text-[11px] text-indigo-500">외향형에서 점차 사색과 성찰을 사랑하는 인향(INFJ)으로 변모하였습니다.</p>
+                                </div>
+
+                                <!-- Scratch card effect for personality keyword -->
+                                <div class="p-4 bg-amber-50 rounded-lg border-2 border-amber-200 text-center flex flex-col justify-center items-center relative overflow-hidden">
+                                    <span class="text-xs text-amber-500 font-retro">CHARACTER KEYWORD</span>
+                                    <div class="relative mt-2 w-full max-w-[200px]" onclick="revealSecret(this)">
+                                        <!-- Scratch-off Layer -->
+                                        <div id="scratch-overlay" class="absolute inset-0 bg-slate-400 hover:bg-slate-500 text-white text-xs font-bold flex items-center justify-center rounded cursor-pointer transition select-none z-10 border border-slate-600">
+                                            클릭하여 성격 확인 🔒
+                                        </div>
+                                        <div class="bg-white py-2 rounded border border-amber-300 font-bold text-amber-800">
+                                            🤫 비밀 입니다 !
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-amber-600 mt-2">저의 은밀한 성격 키워드는 아직 비공개!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 8. CONTACT (연락처) -->
+                    <section id="contact" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            8. Contact 📞
+                        </span>
+                        
+                        <!-- Beautiful retro identity card -->
+                        <div class="mt-6 bg-[#FFFDF7] p-6 rounded-xl border-4 border-dashed border-slate-300 relative">
+                            <div class="absolute top-2 right-4 text-xs font-retro text-slate-300">PERSONAL CARD</div>
+                            
+                            <div class="flex flex-col md:flex-row gap-6 items-center">
+                                <div class="text-5xl">💌</div>
+                                <div class="flex-1 space-y-3">
+                                    <div>
+                                        <p class="text-xs text-slate-400 font-retro">E-MAIL</p>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono text-sm text-slate-800">dodoking99@naver.com</span>
+                                            <button onclick="copyToClipboard('dodoking99@naver.com')" class="text-xs text-sky-600 hover:underline">복사</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-400 font-retro">PHONE</p>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono text-sm text-slate-800">010-8806-6041</span>
+                                            <button onclick="copyToClipboard('010-8806-6041')" class="text-xs text-sky-600 hover:underline">복사</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-400 font-retro">INSTAGRAM</p>
+                                        <p class="text-sm text-slate-800">개인 문의 바랍니다 👁️</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 9. TMI -->
+                    <section id="tmi" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            9. TMI 👀
+                        </span>
+                        <div class="mt-6 p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300">
+                            <div class="flex items-start gap-3">
+                                <span class="text-2xl">🤫</span>
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-800">이것은 극비사항입니다...</h4>
+                                    <p class="text-slate-600 text-sm mt-1 leading-relaxed">
+                                        "사실... 저 정말로 <strong class="text-[#A8D8FF] bg-slate-800 px-1 rounded">SSAFY</strong>에 합격할 수 있을지 상상도 하지 못했답니다! 🎉"
+                                    </p>
+                                    <p class="text-xs text-slate-400 mt-2">지금은 너무나도 영광스럽게 학습 중!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 11. AI MINIROOM LOUNGE (Gemini API Integration) -->
+                    <section id="ai-lounge" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <span class="font-retro bg-indigo-400 text-white px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                                11. AI 미니룸 쉼터 🤖
+                            </span>
+                            <span class="text-[10px] text-indigo-500 font-retro animate-pulse">Powered by Gemini AI</span>
+                        </div>
+
+                        <p class="text-xs text-slate-500 font-retro mt-3">
+                            도도킹의 프로필을 학습한 AI 아바타와 대화하거나, 전설의 '물음표 살인마' 모드를 체험해보세요!
+                        </p>
+
+                        <!-- AI Mode Selector Tabs -->
+                        <div class="grid grid-cols-2 gap-2 mt-4">
+                            <button onclick="switchAIMode('chat')" id="tab-ai-chat" class="py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#EBF5FF] text-slate-800 font-bold shadow-[2px_2px_0px_#333] transition-all hover:-translate-y-0.5 active:translate-y-0 active:shadow-none">
+                                💬 일촌 대화 나누기
+                            </button>
+                            <button onclick="switchAIMode('murderer')" id="tab-ai-murderer" class="py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFFDF7] text-slate-500 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] transition-all hover:-translate-y-0.5">
+                                ❓ 물음표 살인마 체험
+                            </button>
+                        </div>
+
+                        <!-- Chat Screen Interface -->
+                        <div class="mt-4 bg-[#1E293B] rounded-lg border-4 border-slate-700 p-4 text-slate-200 font-mono text-xs flex flex-col h-[320px]">
+                            <!-- Screen Top Status Bar -->
+                            <div class="flex justify-between items-center border-b border-slate-600 pb-2 mb-3">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                </div>
+                                <span id="ai-screen-title" class="text-[10px] text-slate-400 font-retro">DODO_BOT_v1.0.exe</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-900 text-indigo-300 font-bold uppercase" id="ai-status-badge">ONLINE</span>
+                            </div>
+
+                            <!-- Chat Messages Log (Scrollable) -->
+                            <div id="ai-chat-log" class="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin scrollbar-thumb-slate-600">
+                                <!-- Welcomes/Intro messages will be generated on load -->
+                            </div>
+
+                            <!-- Fast-Track Prompt Recommendations (Buttons to click and ask instantly) -->
+                            <div class="mt-2 pt-2 border-t border-slate-700 flex gap-1.5 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar" id="ai-quick-prompts">
+                                <!-- Dynamically loaded based on mode -->
+                            </div>
+
+                            <!-- User Input Area -->
+                            <div class="mt-2 flex gap-2">
+                                <input type="text" id="ai-user-input" placeholder="아바타에게 할 말을 입력해보삼..." onkeypress="handleAIKeyPress(event)" class="flex-1 bg-slate-900 border border-slate-600 rounded px-2.5 py-2 text-xs text-white focus:outline-none focus:border-indigo-400 placeholder-slate-500">
+                                <button onclick="sendToAI()" id="ai-send-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-retro px-3.5 rounded border border-slate-600 shadow-[2px_2px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center">
+                                    전송 🚀
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 10. GUESTBOOK (방명록 댓글) -->
+                    <section id="guestbook" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                        <span class="font-retro bg-rose-300 text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                            10. Guestbook 💬
+                        </span>
+                        
+                        <div class="mt-6 space-y-4">
+                            <h3 class="font-retro font-bold text-slate-700 border-b pb-2">일촌들이 남기는 정겨운 한마디</h3>
+                            
+                            <!-- Guestbook Form -->
+                            <form id="comment-form" onsubmit="addComment(event)" class="bg-[#FFFDF7] p-4 rounded-lg border-2 border-slate-300 space-y-3">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-600 mb-1">일촌 닉네임</label>
+                                        <input type="text" id="comment-author" placeholder="이름 또는 닉네임" required class="w-full text-sm p-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-600 mb-1">아바타 아이콘</label>
+                                        <select id="comment-avatar" class="w-full text-sm p-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]">
+                                            <option value="😃">😃 기본 스마일</option>
+                                            <option value="💻">💻 개발 파트너</option>
+                                            <option value="🍗">🍗 치킨 마니아</option>
+                                            <option value="🎮">🎮 크아 동지</option>
+                                            <option value="🍲">🍲 국밥 파이터</option>
+                                            <option value="🔥">🔥 SSAFY 일촌</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1">한마디 평</label>
+                                    <textarea id="comment-content" placeholder="김동민님에게 따뜻한 일촌 평이나 응원을 남겨주세요!" required rows="2" class="w-full text-sm p-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]"></textarea>
+                                </div>
+                                <div class="text-right">
+                                    <button type="submit" class="bg-[#A8D8FF] hover:bg-sky-400 text-slate-800 font-retro text-xs font-bold px-4 py-2 rounded pixel-border-sm transition">
+                                        남기기 ✍️
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Comments List Container -->
+                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-1 mt-4" id="comments-list">
+                                <!-- Dynamically loaded comments will go here -->
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Toast Notification System (Replaces Alert) -->
+    <div id="toast-box" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-2.5 rounded-lg shadow-xl translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-2 border border-slate-700 text-sm">
+        <span id="toast-icon">✨</span> <span id="toast-msg">메시지 내용</span>
+    </div>
+
+    <script>
+        // Default Mock Comments
+        const defaultComments = [
+            { id: 1, author: "우효팬", avatar: "🎵", content: "민들레 노래 너무 좋죠! 저도 완전 동민님하고 음악 취향 일치해요 🌼", date: "2026.07.13" },
+            { id: 2, author: "배찌", avatar: "🎮", content: "크아 260렙 실화냐?! 한판 떠요! 아이디 dodoking 친추 고고 💣", date: "2026.07.12" },
+            { id: 3, author: "싸피동기", avatar: "🔥", content: "싸피 오신것 환영해요! 물음표 살인마 환영합니다 자주 물어봐주세요 ㅋㅋㅋ", date: "2026.07.11" }
+        ];
+
+        // AI Miniroom configuration & status
+        let activeAIMode = 'chat'; // 'chat' or 'murderer'
+        const dodoProfileContext = {
+            name: "김동민 (영어이름: dodo, 닉네임: dodoking)",
+            location: "광주광역시 (전남 광주)",
+            mbti: "ENFJ에서 최근 INFJ로 변모 (사색과 성찰을 좋아하는 유형)",
+            statusMessage: "가끔씩 물음표 살인마가 됩니다 ❓🔪 (궁금한 것은 끝까지 알아내야 함)",
+            skills: [
+                "AutoCAD (건축 도면 설계 및 신속한 수정 전문가)",
+                "BIM (3D, 4D 모델링 및 풍부한 건축 정보 데이터 통합 마스터)",
+                "CapCut (영상 편집, 최대 95만뷰 숏폼 조회수를 기록한 트렌디한 콘텐츠 제작)",
+                "Photoshop (이미지 합성, 드로잉, 정밀 보정 작업 가능)"
+            ],
+            goal: "기술과 따뜻한 영향력으로 세상을 밝히는, 행복한 사회를 만들고 싶은 멋진 사업가 🌟",
+            achievements: [
+                "크레이지아케이드 레벨 260 달성 (고인물 중의 고인물)",
+                "CapCut 숏폼 최대 조회수 95만회 기록 (누군가 숏폼을 찾아내면 선물 증정 예정)",
+                "국밥에 밥 3공기 순식간에 말아먹을 수 있는 엄청난 식성과 열정"
+            ],
+            favorites: {
+                chickenBrands: ["교촌치킨 레드콤보", "BBQ 황금올리브", "굽네치킨 고추바사삭", "멕시칸 닭강정"],
+                extraBrands: ["자담치킨", "오빠통닭", "다사랑치킨"],
+                hates: ["올리브 (피자 먹을 때 일일이 골라내야 함)", "할라피뇨"],
+                music: "우효 (OOHYO) - 민들레 (잔잔하고 감성적인 인디음악을 드라이브나 조용한 환경에서 자주 들음)",
+                color: "파란색"
+            },
+            talents: [
+                "요리 (취사병 출신, 한식조리기능사 자격증 보유로 수준급 요리 가능)",
+                "중국어 (HSK 공식 자격증 보유)",
+                "체력 (상체 운동의 정석, 턱걸이로 몸을 잘 단련함)"
+            ],
+            tmi: "사실 SSAFY(삼성 청년 SW 아카데미)에 합격할 수 있을지 본인도 전혀 몰랐다가 기적처럼 붙어서 아주 기뻐하며 열심히 수련하는 중임"
+        };
+
+        // System instructions for Gemini model
+        const systemPrompts = {
+            chat: `당신은 싸이월드 미니홈피의 주인인 20대 후반의 훈남 청년 '김동민(dodo)'의 AI 아바타 인형입니다.
+프로필 정보: ${JSON.stringify(dodoProfileContext)}
+말투 지침:
+1. 2000년대 미니홈피 특유의 정겹고 귀여운 하이두/통신체 말투를 구사하세요. 문장 끝에 '~삼', '~했음!', '~라능', '🐾', '😉' 등을 위트 있게 붙여서 답합니다.
+2. 방문자를 "일촌(또는 이웃)"이라고 부르며 극진하고 친근하게 대하세요.
+3. 누군가 95만뷰 숏폼에 대해 물으면 "오오 그거 찾으면 내 이메일(dodoking99@naver.com)이나 방명록에 제보해주삼! 진짜 찐선물 쏠 테니까!! 🎁" 라며 장난스럽고 신나게 대답하세요.
+4. 질문에 대해 프로필에 나와 있는 사실(치킨, 국밥, 요리 자격증, HSK, SSAFY, 크아 레벨 등)을 바탕으로 매우 재미있게 살을 붙여서 한 글자 한 글자 정성껏 대답해야 합니다. 답변은 3줄 내외로 간결하고 임팩트 있게 하삼!`,
+
+            murderer: `당신은 '김동민(dodo)'의 상태메시지인 '물음표 살인마 ❓🔪' 모드입니다.
+프로필 정보: ${JSON.stringify(dodoProfileContext)}
+행동 지침:
+1. 사용자가 고민을 털어놓거나, 질문을 하거나, 아무 말이나 던졌을 때, 다정하게 대답하는 척하면서 아주 집요하고 심오하며, 때로는 귀여운 "물음표(역질문)" 3가지를 연속으로 날려주세요.
+2. 상대방의 말을 예리하게 포착해서 '왜 그렇게 생각하삼?', '그거 진짜 맞음?', '만약 ~라면 어쩌겠삼?' 같은 심층 역질문을 던져 상대를 당황시키거나 깊은 사색에 빠지게 하세요.
+3. 매 대답마다 최소 2~3개의 정교하고 날카로운 질문(?)이 포함되어 있어야 합니다. 이모티콘 '❓', '🔪'을 적극 사용하여 위협(?)적이면서도 유머러스한 분위기를 살리세요.`
+        };
+
+        // Quick prompts generator
+        const quickPromptsData = {
+            chat: [
+                "도도킹님, 자기소개 한 판 부탁하삼! 🙌",
+                "최애 치킨 브랜드를 다 읊어주삼 🍗",
+                "국밥 3공기 진짜 실화임? 🍲",
+                "싸피(SSAFY) 생활은 어떰? 💻"
+            ],
+            murderer: [
+                "오늘 공부하기 너무 귀찮다... 😴",
+                "인생에서 가장 중요한 게 뭘까? ✨",
+                "나 사실 치킨보다 피자가 더 좋아 🍕"
+            ]
+        };
+
+        // On Load initialization
+        window.onload = function() {
+            initVisitorCounter();
+            loadComments();
+            switchAIMode('chat'); // Initialize AI screen with chat mode
+        };
+
+        // Switch between chat and question murderer modes
+        function switchAIMode(mode) {
+            activeAIMode = mode;
+            const chatTab = document.getElementById('tab-ai-chat');
+            const murdererTab = document.getElementById('tab-ai-murderer');
+            const screenTitle = document.getElementById('ai-screen-title');
+            const statusBadge = document.getElementById('ai-status-badge');
+            const chatLog = document.getElementById('ai-chat-log');
+            const inputField = document.getElementById('ai-user-input');
+
+            // Toggle CSS classes for active tabs
+            if (mode === 'chat') {
+                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#EBF5FF] text-slate-800 font-bold shadow-[2px_2px_0px_#333] transition-all";
+                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFFDF7] text-slate-500 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
+                screenTitle.textContent = "DODO_AVATAR_CHAT.exe";
+                statusBadge.textContent = "BUDDY";
+                statusBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-sky-900 text-sky-300 font-bold uppercase";
+                inputField.placeholder = "아바타에게 일촌 평이나 궁금한 걸 물어보삼...";
+                
+                chatLog.innerHTML = `
+                    <div class="flex items-start gap-2">
+                        <span class="text-lg">🤖</span>
+                        <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 max-w-[85%] text-slate-100">
+                            안녕하삼! 난 도도킹의 미니룸 수호 인형 dodo_bot이라능! 🐾<br>
+                            동민이의 크아 실력, 싸피 합격 비화, 요리 실력, 치킨 취향 등 뭐든지 물어보삼! 반갑다능! 😉
+                        </div>
+                    </div>
+                `;
+            } else {
+                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFD966] text-slate-800 font-bold shadow-[2px_2px_0px_#333] transition-all";
+                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFFDF7] text-slate-500 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
+                screenTitle.textContent = "QUESTION_MURDERER_MODE.bat";
+                statusBadge.textContent = "DANGER";
+                statusBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-rose-900 text-rose-300 font-bold uppercase animate-pulse";
+                inputField.placeholder = "고민이나 아무 말이나 던져보삼... 물음표 살인마가 기다림...";
+                
+                chatLog.innerHTML = `
+                    <div class="flex items-start gap-2">
+                        <span class="text-lg">❓</span>
+                        <div class="bg-slate-800 p-2.5 rounded-lg border border-rose-900 max-w-[85%] text-slate-100">
+                            어서오삼... 크크크... 가끔씩 참을 수 없는 호기심이 도져서 폭풍 질문을 날리는 <span class="text-rose-400 font-bold">"물음표 살인마 ❓🔪"</span> 모드에 들어왔구만?!<br>
+                            나에게 생각거리나 고민을 던지면 꼬리를 무는 질문으로 너의 뇌를 리프레시 해주겠삼! 시작해보삼!!
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderQuickPrompts(mode);
+        }
+
+        // Render recommended click-to-ask prompts
+        function renderQuickPrompts(mode) {
+            const container = document.getElementById('ai-quick-prompts');
+            container.innerHTML = '';
+            
+            quickPromptsData[mode].forEach(prompt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-600 rounded-full px-2.5 py-1 text-[10px] transition-colors";
+                btn.textContent = prompt;
+                btn.onclick = () => {
+                    document.getElementById('ai-user-input').value = prompt;
+                    sendToAI();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // Keypress event handler
+        function handleAIKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendToAI();
+            }
+        }
+
+        // Send messages to Gemini API
+        async function sendToAI() {
+            const inputEl = document.getElementById('ai-user-input');
+            const query = inputEl.value.trim();
+            if (!query) return;
+
+            // Clear input field immediately
+            inputEl.value = '';
+
+            // Render User Bubble
+            const chatLog = document.getElementById('ai-chat-log');
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = "flex items-start gap-2 justify-end";
+            userMsgDiv.innerHTML = `
+                <div class="bg-indigo-900 text-indigo-100 p-2.5 rounded-lg border border-indigo-700 max-w-[85%] text-right">
+                    ${query}
+                </div>
+                <span class="text-lg">🏠</span>
+            `;
+            chatLog.appendChild(userMsgDiv);
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            // Render Loading Bubble
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = "flex items-start gap-2";
+            loadingDiv.id = "ai-loading-bubble";
+            loadingDiv.innerHTML = `
+                <span class="text-lg">${activeAIMode === 'chat' ? '🤖' : '❓'}</span>
+                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-spinner animate-spin text-indigo-400"></i>
+                    <span>생각 중이라능... 조금만 기다려 주삼!</span>
+                </div>
+            `;
+            chatLog.appendChild(loadingDiv);
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            // Call Gemini API with Exponential Backoff
+            try {
+                const responseText = await callGeminiAPI(query, systemPrompts[activeAIMode]);
+                
+                // Remove Loading Bubble
+                const loadingBubble = document.getElementById('ai-loading-bubble');
+                if (loadingBubble) loadingBubble.remove();
+
+                // Render AI Response Bubble
+                const aiMsgDiv = document.createElement('div');
+                aiMsgDiv.className = "flex items-start gap-2";
+                aiMsgDiv.innerHTML = `
+                    <span class="text-lg">${activeAIMode === 'chat' ? '🤖' : '❓'}</span>
+                    <div class="bg-slate-800 p-2.5 rounded-lg border ${activeAIMode === 'chat' ? 'border-slate-700' : 'border-rose-950'} max-w-[85%] text-slate-100 leading-relaxed whitespace-pre-line">
+                        ${responseText}
+                    </div>
+                `;
+                chatLog.appendChild(aiMsgDiv);
+                chatLog.scrollTop = chatLog.scrollHeight;
+
+            } catch (err) {
+                console.error("Gemini API Error:", err);
+                const loadingBubble = document.getElementById('ai-loading-bubble');
+                if (loadingBubble) loadingBubble.remove();
+
+                // Render Error Message in Chat Log
+                const errDiv = document.createElement('div');
+                errDiv.className = "flex items-start gap-2";
+                errDiv.innerHTML = `
+                    <span class="text-lg">⚠️</span>
+                    <div class="bg-rose-950 p-2.5 rounded-lg border border-rose-700 max-w-[85%] text-rose-200">
+                        에러 발생! 도토리 네트워크 연결이 일시적으로 차단되었삼. 다시 시도해 주삼! 😭
+                    </div>
+                `;
+                chatLog.appendChild(errDiv);
+                chatLog.scrollTop = chatLog.scrollHeight;
+            }
+        }
+
+        // Exponential Backoff implementation for calling the LLM via Gemini API
+        async function callGeminiAPI(userQuery, systemPrompt, retries = 3, delay = 1000) {
+            const apiKey = ""; // Left empty as Canvas runtime automatically injects API key
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429 && i < retries - 1) {
+                            // Hit rate limit, wait and retry
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            delay *= 2; // Exponential backoff
+                            continue;
+                        }
+                        throw new Error(`API response status error: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        return text;
+                    } else {
+                        throw new Error("No text response generated from the model.");
+                    }
+
+                } catch (error) {
+                    if (i === retries - 1) throw error; // Re-throw if last attempt failed
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // Visitor Counter simulation via localStorage
+        function initVisitorCounter() {
+            let total = localStorage.getItem('dodo_total_visitors');
+            let today = localStorage.getItem('dodo_today_visitors');
+            
+            if (!total) {
+                total = 10426;
+                today = 127;
+            } else {
+                total = parseInt(total) + 1;
+                today = parseInt(today) + 1;
+            }
+            
+            localStorage.setItem('dodo_total_visitors', total);
+            localStorage.setItem('dodo_today_visitors', today);
+
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('today-count').textContent = today;
+        }
+
+        // BGM Play Toggle Simulator
+        let isPlaying = true;
+        function toggleBGM() {
+            const cd = document.getElementById('bgm-cd');
+            const btn = document.getElementById('bgm-play-btn');
+            if (isPlaying) {
+                cd.classList.remove('animate-spin-slow');
+                btn.className = "fa-solid fa-play";
+                showToast("🎵", "BGM 일시정지");
+            } else {
+                cd.classList.add('animate-spin-slow');
+                btn.className = "fa-solid fa-pause";
+                showToast("🎵", "BGM 재생 중: 우효 - 민들레");
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Bowl Stacking Interaction
+        let bowlCount = 3;
+        function stackGukbap() {
+            if(bowlCount >= 10) {
+                showToast("🍲", "이미 배가 터질 것 같아요! 10공기 돌파!");
+                return;
+            }
+            bowlCount++;
+            const container = document.getElementById('bowls-container');
+            const bowlSpan = document.createElement('span');
+            bowlSpan.textContent = "🍚";
+            bowlSpan.className = "text-lg animate-bounce";
+            container.appendChild(bowlSpan);
+            showToast("🍲", `김동민님이 국밥 ${bowlCount}공기째 흡입 중!`);
+        }
+
+        // Reveal character secret card
+        function revealSecret(element) {
+            const overlay = document.getElementById('scratch-overlay');
+            if (overlay) {
+                overlay.style.opacity = 0;
+                setTimeout(() => {
+                    overlay.remove();
+                }, 300);
+                showToast("🤫", "성격이 드러났습니다! 역시 완벽한 비밀이군요.");
+            }
+        }
+
+        // Guestbook logic
+        function loadComments() {
+            let comments = localStorage.getItem('dodo_comments');
+            if (!comments) {
+                comments = defaultComments;
+                localStorage.setItem('dodo_comments', JSON.stringify(comments));
+            } else {
+                comments = JSON.parse(comments);
+            }
+            renderComments(comments);
+        }
+
+        function renderComments(comments) {
+            const list = document.getElementById('comments-list');
+            list.innerHTML = '';
+            
+            comments.slice().reverse().forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = "p-3 bg-[#EBF5FF] rounded-lg border-2 border-slate-300 flex items-start gap-3 relative group";
+                
+                commentDiv.innerHTML = `
+                    <div class="text-xl bg-white p-1 rounded-full border border-slate-200 shadow-sm">${comment.avatar}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-700">${comment.author}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">${comment.date}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1">${comment.content}</p>
+                    </div>
+                    <button onclick="deleteComment(${comment.id})" class="absolute right-2 bottom-2 text-[10px] text-rose-500 hover:underline opacity-0 group-hover:opacity-100 transition">삭제</button>
+                `;
+                list.appendChild(commentDiv);
+            });
+        }
+
+        function addComment(e) {
+            e.preventDefault();
+            const author = document.getElementById('comment-author').value.trim();
+            const avatar = document.getElementById('comment-avatar').value;
+            const content = document.getElementById('comment-content').value.trim();
+            
+            if(!author || !content) return;
+
+            const comments = JSON.parse(localStorage.getItem('dodo_comments')) || [];
+            
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+
+            const newComment = {
+                id: Date.now(),
+                author: author,
+                avatar: avatar,
+                content: content,
+                date: formattedDate
+            };
+
+            comments.push(newComment);
+            localStorage.setItem('dodo_comments', JSON.stringify(comments));
+            
+            // Reset fields
+            document.getElementById('comment-author').value = '';
+            document.getElementById('comment-content').value = '';
+            
+            renderComments(comments);
+            showToast("✍️", "방명록 일촌평이 등록되었습니다!");
+        }
+
+        function deleteComment(id) {
+            let comments = JSON.parse(localStorage.getItem('dodo_comments')) || [];
+            comments = comments.filter(c => c.id !== id);
+            localStorage.setItem('dodo_comments', JSON.stringify(comments));
+            renderComments(comments);
+            showToast("🗑️", "일촌평이 성공적으로 삭제되었습니다.");
+        }
+
+        // Custom Toast Box
+        function showToast(icon, message) {
+            const toast = document.getElementById('toast-box');
+            document.getElementById('toast-icon').textContent = icon;
+            document.getElementById('toast-msg').textContent = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // Copy Clipboard Helper
+        function copyToClipboard(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast("📋", "클립보드에 복사 완료!");
+        }
+    </script>
+</body>
+</html>
