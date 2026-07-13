@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>dodoking's Miniroom 🐾</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS with CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Enable class-based dark mode in Tailwind
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Web Fonts for Retro Pixel vibe and clean body text -->
@@ -13,9 +19,13 @@
     <style>
         body {
             font-family: 'Pretendard', sans-serif;
-            background-color: #FFFDF7; /* 크림 화이트 */
             background-image: radial-gradient(#A8D8FF 1px, transparent 1px);
             background-size: 20px 20px;
+        }
+        
+        /* Dark mode radial dot background */
+        body.dark {
+            background-image: radial-gradient(#334155 1px, transparent 1px);
         }
         
         .font-retro {
@@ -34,14 +44,14 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #FFFDF7;
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
             background: #A8D8FF;
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #86C7FF;
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
         }
 
         /* CD spinning animation for BGM Player */
@@ -62,19 +72,29 @@
             border: 2px solid #333;
             box-shadow: 2px 2px 0px #333;
         }
+        .dark .pixel-border {
+            border: 4px solid #475569;
+            box-shadow: 4px 4px 0px #1e293b;
+        }
+        .dark .pixel-border-sm {
+            border: 2px solid #475569;
+            box-shadow: 2px 2px 0px #1e293b;
+        }
 
-        /* Custom transitions */
-        .tab-btn-active {
-            background-color: #A8D8FF !important;
-            color: #333 !important;
-            font-weight: bold;
+        /* Hide scrollbar utility */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="min-h-screen py-6 px-4 md:py-12 flex items-center justify-center">
+<body class="min-h-screen py-4 px-2 md:py-12 flex items-center justify-center bg-[#FFFDF7] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
 
     <!-- Main Cyworld Board Outer Wrapper -->
-    <div class="w-full max-w-6xl bg-[#8EC5FC] p-4 md:p-6 rounded-3xl border-4 border-slate-700 shadow-[8px_8px_0px_#333] relative">
+    <div class="w-full max-w-6xl bg-[#8EC5FC] dark:bg-slate-800 p-3 md:p-6 rounded-3xl border-4 border-slate-700 dark:border-slate-600 shadow-[8px_8px_0px_#333] dark:shadow-[8px_8px_0px_#1e293b] relative transition-colors duration-300">
         
         <!-- Retro Dot Matrix Design at the border of the notebook -->
         <div class="absolute top-4 left-4 right-4 h-2 flex justify-between px-4 opacity-50 pointer-events-none">
@@ -84,30 +104,38 @@
         </div>
 
         <!-- Inner Notebook Layout -->
-        <div class="bg-[#EBF5FF] rounded-2xl border-4 border-dashed border-white p-2 md:p-4">
+        <div class="bg-[#EBF5FF] dark:bg-slate-900 rounded-2xl border-4 border-dashed border-white dark:border-slate-800 p-2 md:p-4 transition-colors duration-300">
             
-            <!-- Top Dashboard: Visitor Counter, Mini-homepage Title & BGM Indicator -->
-            <div class="flex flex-col md:flex-row justify-between items-center mb-4 pb-3 border-b-2 border-[#A8D8FF] font-retro text-slate-700 text-xs md:text-sm gap-2">
-                <div class="flex items-center gap-4">
-                    <span class="bg-[#FFD966] text-slate-800 px-3 py-1 rounded-full font-bold pixel-border-sm">
-                        TODAY <span class="text-rose-500" id="today-count">127</span> 
-                        | TOTAL <span id="total-count">10426</span>
+            <!-- Top Dashboard: Visitor Counter, Theme Switcher & BGM Indicator -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4 pb-3 border-b-2 border-[#A8D8FF] dark:border-slate-800 font-retro text-slate-700 dark:text-slate-300 text-xs md:text-sm gap-3">
+                <div class="flex items-center gap-3 md:gap-4 flex-wrap justify-center">
+                    <span class="bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 rounded-full font-bold pixel-border-sm text-[10px] md:text-xs">
+                        TODAY <span class="text-rose-500 font-black" id="today-count">127</span> 
+                        | TOTAL <span id="total-count" class="font-bold">10426</span>
                     </span>
-                    <span class="hidden md:inline text-slate-600">🐾 dodoking님의 미니홈피에 오신 것을 환영합니다!</span>
+                    
+                    <!-- HIGHLY VISIBLE DARK MODE TOGGLE BUTTON -->
+                    <button onclick="toggleDarkMode()" id="theme-toggle-btn" class="bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-amber-300 px-3.5 py-1.5 rounded-full font-bold pixel-border-sm text-[10px] md:text-xs flex items-center gap-1.5 transition active:scale-95">
+                        <span id="theme-btn-icon">☀️</span> <span id="theme-btn-text">주간 모드</span>
+                    </button>
+
+                    <span class="text-slate-600 dark:text-slate-400 text-[11px] md:text-sm text-center">🐾 dodoking님의 미니홈피에 오신 것을 환영합니다!</span>
                 </div>
                 
                 <!-- Retro BGM simulated player -->
-                <div class="flex items-center bg-white p-2 rounded-lg border-2 border-slate-400 gap-3 max-w-xs shadow-inner">
-                    <div class="relative w-8 h-8 flex-shrink-0">
-                        <div id="bgm-cd" class="w-full h-full bg-[#333] rounded-full flex items-center justify-center text-[8px] text-white font-bold animate-spin-slow">
-                            🎵
+                <div class="flex items-center bg-white dark:bg-slate-800 p-2 rounded-lg border-2 border-slate-400 dark:border-slate-600 gap-3 w-full md:w-auto max-w-xs justify-between shadow-inner transition-colors duration-300">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <div class="relative w-8 h-8 flex-shrink-0">
+                            <div id="bgm-cd" class="w-full h-full bg-[#333] dark:bg-slate-950 rounded-full flex items-center justify-center text-[8px] text-white font-bold animate-spin-slow">
+                                🎵
+                            </div>
+                        </div>
+                        <div class="text-left leading-tight overflow-hidden">
+                            <p class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">민들레 (Dandelion)</p>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">우효 (OOHYO)</p>
                         </div>
                     </div>
-                    <div class="text-left leading-tight overflow-hidden">
-                        <p class="font-bold text-slate-800 text-[11px] truncate">민들레 (Dandelion)</p>
-                        <p class="text-[10px] text-slate-500 truncate">우효 (OOHYO)</p>
-                    </div>
-                    <button onclick="toggleBGM()" class="text-slate-600 hover:text-slate-900 transition ml-1 p-1">
+                    <button onclick="toggleBGM()" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition p-1 text-sm">
                         <i id="bgm-play-btn" class="fa-solid fa-pause"></i>
                     </button>
                 </div>
@@ -117,10 +145,10 @@
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 
                 <!-- LEFT COLUMN: Profile info, quick links, MBTI & music player visual -->
-                <div class="lg:col-span-1 bg-white p-4 rounded-xl border-4 border-slate-700 flex flex-col justify-between shadow-[4px_4px_0px_rgba(0,0,0,0.15)]">
+                <div class="lg:col-span-1 bg-white dark:bg-slate-800 p-4 rounded-xl border-4 border-slate-700 dark:border-slate-600 flex flex-col justify-between shadow-[4px_4px_0px_rgba(0,0,0,0.15)] transition-colors duration-300">
                     <div>
-                        <!-- Simulated Cyworld Avatar Area -->
-                        <div class="w-full bg-[#F4F4F4] aspect-square rounded-lg border-2 border-slate-300 flex items-center justify-center relative overflow-hidden group">
+                        <!-- Simulated Cyworld Avatar Area (Using 제공된 스크린샷 2026-07-13 105638.png) -->
+                        <div class="w-full bg-[#F4F4F4] dark:bg-slate-900 aspect-square rounded-lg border-2 border-slate-300 dark:border-slate-700 flex items-center justify-center relative overflow-hidden group">
                             <!-- User-provided Miniroom Screenshot as Avatar -->
                             <img src="스크린샷 2026-07-13 105638.png" alt="dodoking's Miniroom" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://placehold.co/300x300/e0f2fe/0284c7?text=Miniroom'">
                             
@@ -137,236 +165,230 @@
                         </div>
 
                         <!-- Profile Text / Status Msg -->
-                        <div class="my-4 py-3 border-y-2 border-dashed border-slate-200">
-                            <p class="text-xs text-slate-500 font-retro mb-1">Status Message</p>
-                            <p class="text-sm font-semibold text-slate-700">
+                        <div class="my-4 py-3 border-y-2 border-dashed border-slate-200 dark:border-slate-700">
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-retro mb-1">Status Message</p>
+                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">
                                 "가끔씩 물음표 살인마가 됩니다🔪"
                             </p>
                         </div>
 
                         <!-- Mini Info Table -->
-                        <div class="space-y-2 text-xs text-slate-600 font-retro">
+                        <div class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-retro">
                             <div class="flex justify-between">
-                                <span class="text-slate-400">이름</span>
-                                <span class="font-bold text-slate-800">김동민 (dodo)</span>
+                                <span class="text-slate-400 dark:text-slate-500">이름</span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200">김동민 (dodo)</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-400">거주지</span>
-                                <span class="text-slate-800 font-bold"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>광주광역시</span>
+                                <span class="text-slate-400 dark:text-slate-500">거주지</span>
+                                <span class="text-slate-800 dark:text-slate-200 font-bold"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>광주광역시</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-400">MBTI</span>
-                                <span class="bg-[#A8D8FF] px-1.5 py-0.5 rounded text-slate-800 font-bold">INFJ <span class="text-[10px] text-slate-500 font-normal">(ENFJ였음)</span></span>
+                                <span class="text-slate-400 dark:text-slate-500">MBTI</span>
+                                <span class="bg-[#A8D8FF] dark:bg-sky-900 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200 font-bold">INFJ <span class="text-[10px] text-slate-500 dark:text-slate-400 font-normal">(ENFJ였음)</span></span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Left Column Footer Quick Contacts -->
-                    <div class="mt-6 pt-4 border-t border-slate-100">
-                        <h4 class="text-xs font-retro text-slate-400 mb-2">QUICK LINK</h4>
-                        <div class="flex justify-around text-slate-600">
-                            <a href="mailto:dodoking99@naver.com" class="hover:text-[#A8D8FF] transition text-lg" title="이메일 보내기">
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <h4 class="text-xs font-retro text-slate-400 dark:text-slate-500 mb-2">QUICK LINK</h4>
+                        <div class="flex justify-around text-slate-600 dark:text-slate-400">
+                            <a href="mailto:dodoking99@naver.com" class="hover:text-[#A8D8FF] dark:hover:text-amber-300 transition text-lg" title="이메일 보내기">
                                 <i class="fa-solid fa-envelope"></i>
                             </a>
-                            <a href="#contact" class="hover:text-[#A8D8FF] transition text-lg" title="연락처">
+                            <a href="#contact" class="hover:text-[#A8D8FF] dark:hover:text-amber-300 transition text-lg" title="연락처">
                                 <i class="fa-solid fa-phone"></i>
                             </a>
-                            <a href="#guestbook" class="hover:text-[#A8D8FF] transition text-lg" title="방명록 바로가기">
+                            <a href="#guestbook" class="hover:text-[#A8D8FF] dark:hover:text-amber-300 transition text-lg" title="방명록 바로가기">
                                 <i class="fa-solid fa-book"></i>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: Continuous Scrolling Sections -->
-                <div class="lg:col-span-3 space-y-8 h-[75vh] overflow-y-auto pr-2" id="main-scroll-container">
+                <!-- RIGHT COLUMN: Continuous Scrolling Sections (Optimized responsiveness) -->
+                <div class="lg:col-span-3 space-y-8 h-auto lg:h-[75vh] overflow-y-visible lg:overflow-y-auto pr-0 lg:pr-2" id="main-scroll-container">
                     
                     <!-- 1. INTRO (히어로) -->
-                    <section id="intro" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="intro" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             1. Intro ✨
                         </span>
-                        <div class="mt-6 text-center py-8 bg-gradient-to-br from-[#FFFDF7] to-[#EBF5FF] rounded-lg border-2 border-slate-300 relative overflow-hidden">
-                            <div class="absolute -top-10 -left-10 w-32 h-32 bg-[#A8D8FF] rounded-full opacity-30 blur-xl"></div>
-                            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-[#FFD966] rounded-full opacity-30 blur-xl"></div>
+                        <div class="mt-6 text-center py-6 md:py-8 bg-gradient-to-br from-[#FFFDF7] to-[#EBF5FF] dark:from-slate-800 dark:to-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 relative overflow-hidden">
+                            <div class="absolute -top-10 -left-10 w-32 h-32 bg-[#A8D8FF] dark:bg-sky-900 rounded-full opacity-30 blur-xl"></div>
+                            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-[#FFD966] dark:bg-amber-500 rounded-full opacity-30 blur-xl"></div>
                             
-                            <h2 class="font-retro text-2xl md:text-3xl font-extrabold text-slate-800 mb-4 tracking-wider leading-relaxed">
+                            <h2 class="font-retro text-xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 mb-4 tracking-wider leading-relaxed">
                                 안녕하세요!<br>
-                                <span class="bg-[#A8D8FF] px-2">김동민</span> 입니다.<br>
-                                영어 이름은 <span class="bg-[#FFD966] px-2">dodo</span> 입니다!
+                                <span class="bg-[#A8D8FF] dark:bg-sky-900 px-2 inline-block my-1 rounded">김동민</span> 입니다.<br>
+                                영어 이름은 <span class="bg-[#FFD966] dark:bg-amber-500 px-2 inline-block my-1 rounded text-slate-900">dodo</span> 입니다!
                             </h2>
-                            <p class="text-slate-500 font-retro text-sm">#dodoking #대만 #옷 🐾</p>
+                            <p class="text-slate-500 dark:text-slate-400 font-retro text-xs md:text-sm">#dodoking #대만 #옷 🐾</p>
                         </div>
                     </section>
 
                     <!-- 2. ABOUT ME -->
-                    <section id="about" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="about" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#A8D8FF] dark:bg-sky-950 text-slate-800 dark:text-slate-200 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             2. About Me 🐾
                         </span>
                         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Left: Card with bio details -->
-                            <div class="bg-[#FFFDF7] p-4 rounded-lg border-2 border-slate-300 flex flex-col justify-between">
+                            <div class="bg-[#FFFDF7] dark:bg-slate-900 p-4 rounded-lg border-2 border-slate-300 dark:border-slate-700 flex flex-col justify-between transition-colors duration-300">
                                 <div>
-                                    <h3 class="font-retro font-bold text-slate-700 border-b pb-2 mb-3"><i class="fa-solid fa-id-card mr-2 text-sky-500"></i>기본 프로필</h3>
-                                    <ul class="space-y-3 text-sm text-slate-600">
-                                        <li><strong>닉네임:</strong> <span class="bg-amber-100 px-1 py-0.5 rounded">dodoking</span></li>
+                                    <h3 class="font-retro font-bold text-slate-700 dark:text-slate-200 border-b dark:border-slate-700 pb-2 mb-3"><i class="fa-solid fa-id-card mr-2 text-sky-500"></i>기본 프로필</h3>
+                                    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                                        <li><strong>닉네임:</strong> <span class="bg-amber-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-1 py-0.5 rounded">dodoking</span></li>
                                         <li><strong>거주지역:</strong> 전남 광주광역시</li>
                                         <li><strong>특징:</strong> 질문이 너무 많아 <span class="text-rose-500 font-semibold">"물음표 살인마"</span>가 되는 매력 소유자 ❓</li>
                                     </ul>
                                 </div>
-                                <div class="mt-4 p-2 bg-yellow-50 rounded text-xs text-amber-800 border border-amber-200">
+                                <div class="mt-4 p-2 bg-yellow-50 dark:bg-slate-800 rounded text-xs text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-slate-700">
                                     💡 "궁금한 건 참을 수 없어요! 항상 원리를 파고듭니다."
                                 </div>
                             </div>
 
-                            <!-- Right: Custom Styled Cyworld Room representation -->
-                            <div class="bg-[#EBF5FF] p-4 rounded-lg border-2 border-slate-300 flex flex-col justify-center items-center relative overflow-hidden min-h-[200px]">
-                                <div class="text-center z-10">
-                                    <!-- A funny pixel-like graphic/art representation of Gwangju dodoking -->
-                                    <div class="text-5xl mb-3 animate-bounce">🏡</div>
-                                    <h4 class="font-retro text-xs text-slate-500 uppercase tracking-widest">dodoking's Miniroom</h4>
-                                    <p class="text-xs text-slate-600 mt-1">광주에 거주하는 물음표 가득한 dodo방</p>
-                                </div>
-                                <!-- Floating question marks -->
-                                <span class="absolute top-4 left-6 text-2xl text-sky-400 opacity-40 animate-pulse">?</span>
-                                <span class="absolute bottom-6 right-8 text-3xl text-yellow-400 opacity-40 animate-pulse delay-75">?</span>
-                                <span class="absolute top-1/2 left-3/4 text-xl text-indigo-400 opacity-30 animate-pulse delay-150">?</span>
+                            <!-- Right: High-fidelity Miniroom Display (스크린샷 2026-07-13 105638_2.png) -->
+                            <div class="bg-[#EBF5FF] dark:bg-slate-900 p-1.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 flex flex-col justify-center items-center relative overflow-hidden min-h-[220px] md:min-h-[200px] transition-colors duration-300">
+                                <img src="스크린샷 2026-07-13 105638_2.png" alt="dodoking's Real Miniroom" class="w-full h-full object-cover rounded shadow-md transition-transform duration-300 hover:scale-105" onerror="this.src='https://placehold.co/600x400/e0f2fe/0284c7?text=dodoking+Miniroom'">
                             </div>
                         </div>
                     </section>
 
                     <!-- 3. SKILLS -->
-                    <section id="skills" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="skills" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             3. Skills 🛠️
                         </span>
                         <div class="mt-6 space-y-4">
-                            <p class="text-sm text-slate-500 font-retro mb-4">제가 다룰 수 있는 멋진 프로그램들과 활용 수준입니다.</p>
+                            <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-retro mb-4">제가 다룰 수 있는 멋진 프로그램들과 활용 수준입니다.</p>
                             
                             <!-- Skill 1 -->
-                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="font-bold text-slate-800">AutoCAD 📐</span>
-                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">건축 도면 전문가</span>
+                            <div class="p-3 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1 flex-wrap gap-1">
+                                    <span class="font-bold text-slate-800 dark:text-slate-100 text-xs md:text-sm">AutoCAD 📐</span>
+                                    <span class="text-[10px] font-retro text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">건축 도면 전문가</span>
                                 </div>
-                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden border border-slate-400 dark:border-slate-600">
                                     <div class="bg-[#A8D8FF] h-full rounded-full transition-all duration-1000" style="width: 85%;"></div>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1">건축 도면 작성 및 신속한 설계 수정이 가능합니다.</p>
+                                <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-1">건축 도면 작성 및 신속한 설계 수정이 가능합니다.</p>
                             </div>
 
                             <!-- Skill 2 -->
-                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="font-bold text-slate-800">BIM 🏗️</span>
-                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">3D/4D 모델링 마스터</span>
+                            <div class="p-3 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1 flex-wrap gap-1">
+                                    <span class="font-bold text-slate-800 dark:text-slate-100 text-xs md:text-sm">BIM 🏗️</span>
+                                    <span class="text-[10px] font-retro text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">3D/4D 모델링 마스터</span>
                                 </div>
-                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden border border-slate-400 dark:border-slate-600">
                                     <div class="bg-[#FFD966] h-full rounded-full transition-all duration-1000" style="width: 80%;"></div>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1">3D/4D 모델링 및 풍부한 건축 정보 데이터 통합 관리.</p>
+                                <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-1">3D/4D 모델링 및 풍부한 건축 정보 데이터 통합 관리.</p>
                             </div>
 
                             <!-- Skill 3 -->
-                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="font-bold text-slate-800">CapCut 🎥</span>
-                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">숏폼 크리에이터</span>
+                            <div class="p-3 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1 flex-wrap gap-1">
+                                    <span class="font-bold text-slate-800 dark:text-slate-100 text-xs md:text-sm">CapCut 🎥</span>
+                                    <span class="text-[10px] font-retro text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">숏폼 크리에이터</span>
                                 </div>
-                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden border border-slate-400 dark:border-slate-600">
                                     <div class="bg-emerald-300 h-full rounded-full transition-all duration-1000" style="width: 90%;"></div>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1">감각적인 영상 편집 및 고성과 숏폼 콘텐츠 제작.</p>
+                                <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-1">감각적인 영상 편집 및 고성과 숏폼 콘텐츠 제작.</p>
                             </div>
 
                             <!-- Skill 4 -->
-                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="font-bold text-slate-800">Photoshop 🎨</span>
-                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">디지털 드로잉 & 보정</span>
+                            <div class="p-3 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1 flex-wrap gap-1">
+                                    <span class="font-bold text-slate-800 dark:text-slate-100 text-xs md:text-sm">Photoshop 🎨</span>
+                                    <span class="text-[10px] font-retro text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">디지털 드로잉 & 보정</span>
                                 </div>
-                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden border border-slate-400 dark:border-slate-600">
                                     <div class="bg-rose-300 h-full rounded-full transition-all duration-1000" style="width: 75%;"></div>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1">자유로운 이미지 편집 및 합성, 정밀 보정 작업 가능.</p>
+                                <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-1">자유로운 이미지 편집 및 합성, 정밀 보정 작업 가능.</p>
                             </div>
 
                             <!-- Skill 5 (PowerPoint) -->
-                            <div class="p-3 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 hover:scale-[1.01] transition-transform duration-200">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="font-bold text-slate-800">PowerPoint 📊</span>
-                                    <span class="text-xs font-retro text-slate-500 bg-slate-100 px-2 py-0.5 rounded">기획 및 발표 마스터</span>
+                            <div class="p-3 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 hover:scale-[1.01] transition-transform duration-200">
+                                <div class="flex justify-between items-center mb-1 flex-wrap gap-1">
+                                    <span class="font-bold text-slate-800 dark:text-slate-100 text-xs md:text-sm">PowerPoint 📊</span>
+                                    <span class="text-[10px] font-retro text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">기획 및 발표 마스터</span>
                                 </div>
-                                <div class="w-full bg-slate-200 h-3.5 rounded-full overflow-hidden border border-slate-400">
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden border border-slate-400 dark:border-slate-600">
                                     <div class="bg-indigo-300 h-full rounded-full transition-all duration-1000" style="width: 85%;"></div>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1">깔끔하고 직관적인 프레젠테이션 디자인 및 기획 문서 작성.</p>
+                                <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-1">깔끔하고 직관적인 프레젠테이션 디자인 및 기획 문서 작성.</p>
                             </div>
                         </div>
                     </section>
 
                     <!-- 4. GOAL -->
-                    <section id="goal" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="goal" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#A8D8FF] dark:bg-sky-950 text-slate-800 dark:text-slate-200 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             4. Goal 🚀
                         </span>
-                        <div class="mt-6 p-6 bg-gradient-to-r from-yellow-100 via-sky-100 to-indigo-100 rounded-lg border-2 border-slate-300 text-center">
-                            <p class="text-xs text-slate-500 uppercase tracking-widest font-retro mb-2">My Final Destination</p>
-                            <h3 class="text-xl md:text-2xl font-extrabold text-slate-800 leading-normal">
+                        <div class="mt-6 p-4 md:p-6 bg-gradient-to-r from-yellow-100 via-sky-100 to-indigo-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center transition-colors duration-300">
+                            <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-retro mb-2">My Final Destination</p>
+                            <h3 class="text-lg md:text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-normal">
                                 "행복한 사회를 만들고 싶은 <br class="md:hidden">
-                                <span class="bg-white/80 px-2 rounded-lg py-1 shadow-sm border border-slate-200">🌟 멋진 사업가 🌟</span>"
+                                <span class="bg-white/80 dark:bg-slate-900/80 px-2 rounded-lg py-1 shadow-sm border border-slate-200 dark:border-slate-700">🌟 멋진 사업가 🌟</span>"
                             </h3>
-                            <p class="text-xs text-slate-500 mt-4 font-retro">기술과 따뜻한 영향력으로 세상을 조금 더 밝게 물들이겠습니다.</p>
+                            <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 mt-4 font-retro">기술과 따뜻한 영향력으로 세상을 조금 더 밝게 물들이겠습니다.</p>
                         </div>
                     </section>
 
                     <!-- 5. ACHIEVEMENTS (나의 업적) -->
-                    <section id="achievements" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="achievements" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             5. Achievements 🏆
                         </span>
-                        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                             
                             <!-- Achievement 1: Crazyarcade -->
-                            <div class="p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
+                            <div class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
                                 <div>
                                     <span class="text-4xl">💣</span>
-                                    <h4 class="font-retro font-bold text-slate-800 mt-2">크아 레벨 260</h4>
-                                    <p class="text-xs text-slate-500 mt-1">Crazyarcade 고인물의 품격, 물풍선 마스터 클래스</p>
+                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">크아 레벨 260</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Crazyarcade 고인물의 품격, 물풍선 마스터 클래스</p>
                                 </div>
                                 <div class="mt-4">
-                                    <span class="text-[10px] bg-sky-100 text-sky-800 px-2 py-1 rounded font-bold">LEGENDARY</span>
+                                    <span class="text-[10px] bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 px-2 py-1 rounded font-bold">LEGENDARY</span>
                                 </div>
                             </div>
 
                             <!-- Achievement 2: Shorts View count -->
-                            <div class="p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
+                            <div class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
                                 <div>
                                     <span class="text-4xl">🔥</span>
-                                    <h4 class="font-retro font-bold text-slate-800 mt-2">숏폼 최대 95만뷰</h4>
-                                    <p class="text-xs text-slate-500 mt-1">CapCut을 이용한 트렌디한 편집으로 달성한 엄청난 도달율</p>
+                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">숏폼 최대 95만뷰</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">CapCut을 이용한 트렌디한 편집으로 달성한 엄청난 도달율</p>
                                 </div>
-                                <div class="mt-4">
-                                    <span class="text-[10px] bg-red-100 text-red-800 px-2 py-1 rounded font-bold">POPULAR</span>
+                                <div class="mt-4 flex flex-col items-center gap-1.5">
+                                    <span class="text-[10px] bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-300 px-2.5 py-1 rounded font-bold leading-none">
+                                        (숏폼 찾을시 선물 🎁)
+                                    </span>
+                                    <span class="text-[10px] bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 px-2 py-0.5 rounded font-bold">POPULAR</span>
                                 </div>
                             </div>
 
                             <!-- Achievement 3: Gukbap stacking game -->
-                            <div id="gukbap-card" class="p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200 relative overflow-hidden select-none cursor-pointer" onclick="stackGukbap()">
+                            <div id="gukbap-card" class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200 relative overflow-hidden select-none cursor-pointer" onclick="stackGukbap()">
                                 <div>
                                     <span class="text-4xl">🍲</span>
-                                    <h4 class="font-retro font-bold text-slate-800 mt-2">국밥에 밥 3공기 말기</h4>
-                                    <p class="text-xs text-slate-500 mt-1">끝까지 식지 않는 열정으로 국밥 3공기를 뚝딱 해치웁니다!</p>
+                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">국밥에 밥 3공기 말기</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">끝까지 식지 않는 열정으로 국밥 3공기를 뚝딱 해치웁니다!</p>
                                 </div>
                                 <!-- Stacking bowls interactive graphics inside card -->
                                 <div class="mt-4 flex flex-col items-center">
-                                    <div class="flex justify-center -space-x-1 mb-1" id="bowls-container">
+                                    <div class="flex justify-center flex-wrap gap-1 max-w-full -space-x-1 mb-1" id="bowls-container">
                                         <span class="text-lg">🍚</span>
                                         <span class="text-lg">🍚</span>
                                         <span class="text-lg">🍚</span>
                                     </div>
-                                    <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-1 rounded font-bold">CLICK TO EAT MORE!</span>
+                                    <span class="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-1 rounded font-bold">CLICK TO EAT MORE!</span>
                                 </div>
                             </div>
 
@@ -374,86 +396,86 @@
                     </section>
 
                     <!-- 6. FAVORITE & HATE -->
-                    <section id="favorite" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="favorite" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#A8D8FF] dark:bg-sky-950 text-slate-800 dark:text-slate-200 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             6. Taste / Likes & Dislikes 🍕
                         </span>
                         <div class="mt-6 space-y-6">
                             
                             <!-- Chicken Section (The ultimate love) -->
                             <div>
-                                <h3 class="font-retro font-bold text-slate-700 border-b pb-2 mb-4 flex items-center justify-between">
+                                <h3 class="font-retro font-bold text-slate-700 dark:text-slate-200 border-b dark:border-slate-700 pb-2 mb-4 flex items-center justify-between text-xs md:text-sm">
                                     <span>🍗 치킨 취향 분석 (Brand & Menu)</span>
-                                    <span class="text-xs text-[#A8D8FF] font-bold">1순위 최애식품</span>
+                                    <span class="text-[10px] md:text-xs text-[#A8D8FF] dark:text-amber-300 font-bold">1순위 최애식품</span>
                                 </h3>
                                 
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                     <!-- Kyochon -->
-                                    <div class="bg-stone-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
-                                        <div class="w-12 h-12 mx-auto bg-stone-800 text-amber-400 font-bold text-[10px] flex items-center justify-center rounded-full border-2 border-stone-600 mb-2">교촌</div>
-                                        <h4 class="font-bold text-xs text-slate-800">레드콤보</h4>
-                                        <p class="text-[10px] text-rose-500 font-semibold mt-1">매콤바삭 원조</p>
+                                    <div class="bg-stone-50 dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden group">
+                                        <div class="w-10 h-10 md:w-12 md:h-12 mx-auto bg-stone-800 dark:bg-slate-950 text-amber-400 font-bold text-[9px] md:text-[10px] flex items-center justify-center rounded-full border-2 border-stone-600 dark:border-slate-600 mb-2">교촌</div>
+                                        <h4 class="font-bold text-xs text-slate-800 dark:text-slate-200">레드콤보</h4>
+                                        <p class="text-[10px] text-rose-500 dark:text-rose-400 font-semibold mt-1">매콤바삭 원조</p>
                                     </div>
                                     <!-- BBQ -->
-                                    <div class="bg-amber-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
-                                        <div class="w-12 h-12 mx-auto bg-amber-500 text-white font-bold text-xs flex items-center justify-center rounded-full border-2 border-amber-600 mb-2">BBQ</div>
-                                        <h4 class="font-bold text-xs text-slate-800">황금올리브</h4>
-                                        <p class="text-[10px] text-amber-600 font-semibold mt-1">후라이드의 정석</p>
+                                    <div class="bg-amber-50 dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden group">
+                                        <div class="w-10 h-10 md:w-12 md:h-12 mx-auto bg-amber-500 text-white font-bold text-xs flex items-center justify-center rounded-full border-2 border-amber-600 mb-2">BBQ</div>
+                                        <h4 class="font-bold text-xs text-slate-800 dark:text-slate-200">황금올리브</h4>
+                                        <p class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold mt-1">후라이드의 정석</p>
                                     </div>
                                     <!-- Goobne -->
-                                    <div class="bg-orange-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
-                                        <div class="w-12 h-12 mx-auto bg-orange-600 text-white font-bold text-xs flex items-center justify-center rounded-full border-2 border-orange-700 mb-2">굽네</div>
-                                        <h4 class="font-bold text-xs text-slate-800">고추바사삭</h4>
-                                        <p class="text-[10px] text-orange-600 font-semibold mt-1">오븐구이 끝판왕</p>
+                                    <div class="bg-orange-50 dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden group">
+                                        <div class="w-10 h-10 md:w-12 md:h-12 mx-auto bg-orange-600 text-white font-bold text-xs flex items-center justify-center rounded-full border-2 border-orange-700 mb-2">굽네</div>
+                                        <h4 class="font-bold text-xs text-slate-800 dark:text-slate-200">고추바사삭</h4>
+                                        <p class="text-[10px] text-orange-600 dark:text-orange-400 font-semibold mt-1">오븐구이 끝판왕</p>
                                     </div>
                                     <!-- Mexican -->
-                                    <div class="bg-red-50 p-3 rounded-lg border border-slate-200 text-center relative overflow-hidden group">
-                                        <div class="w-12 h-12 mx-auto bg-red-600 text-white font-bold text-[10px] flex items-center justify-center rounded-full border-2 border-red-700 mb-2">멕시칸</div>
-                                        <h4 class="font-bold text-xs text-slate-800">닭강정</h4>
-                                        <p class="text-[10px] text-red-500 font-semibold mt-1">달콤바삭 양념</p>
+                                    <div class="bg-red-50 dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden group">
+                                        <div class="w-10 h-10 md:w-12 md:h-12 mx-auto bg-red-600 text-white font-bold text-[9px] md:text-[10px] flex items-center justify-center rounded-full border-2 border-red-700 mb-2">멕시칸</div>
+                                        <h4 class="font-bold text-xs text-slate-800 dark:text-slate-200">닭강정</h4>
+                                        <p class="text-[10px] text-red-500 dark:text-red-400 font-semibold mt-1">달콤바삭 양념</p>
                                     </div>
                                 </div>
 
                                 <!-- Chicken Sub-Brands Toggle -->
-                                <div class="mt-4 bg-[#FFFDF7] p-3 rounded-lg border border-slate-300">
-                                    <p class="text-xs text-slate-600"><strong class="text-amber-600">➕ 추가 선호 브랜드:</strong> 자담치킨, 오빠통닭, 다사랑치킨</p>
+                                <div class="mt-4 bg-[#FFFDF7] dark:bg-slate-900 p-3 rounded-lg border border-slate-300 dark:border-slate-700 transition-colors duration-300">
+                                    <p class="text-xs text-slate-600 dark:text-slate-300"><strong class="text-amber-600 dark:text-amber-400">➕ 추가 선호 브랜드:</strong> 자담치킨, 오빠통닭, 다사랑치킨</p>
                                 </div>
                             </div>
 
                             <!-- Dislikes & Details -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-red-50 p-4 rounded-lg border-2 border-rose-300">
-                                    <h4 class="font-retro font-bold text-rose-800 mb-2"><i class="fa-solid fa-circle-xmark mr-1"></i> 절대 금지 음식</h4>
-                                    <p class="text-sm text-rose-700">올리브 🫒, 할라피뇨 🌶️</p>
-                                    <p class="text-[11px] text-rose-500 mt-1">피자 먹을 때 일일이 빼고 먹는 고난을 겪습니다.</p>
+                                <div class="bg-red-50 dark:bg-slate-900 p-4 rounded-lg border-2 border-rose-300 dark:border-rose-950 transition-colors duration-300">
+                                    <h4 class="font-retro font-bold text-rose-800 dark:text-rose-400 mb-2 text-xs md:text-sm"><i class="fa-solid fa-circle-xmark mr-1"></i> 절대 금지 음식</h4>
+                                    <p class="text-sm text-rose-700 dark:text-rose-300">올리브 🫒, 할라피뇨 🌶️</p>
+                                    <p class="text-[11px] text-rose-500 dark:text-rose-400 mt-1">피자 먹을 때 일일이 빼고 먹는 고난을 겪습니다.</p>
                                 </div>
-                                <div class="bg-sky-50 p-4 rounded-lg border-2 border-sky-300 flex flex-col justify-between">
+                                <div class="bg-sky-50 dark:bg-slate-900 p-4 rounded-lg border-2 border-sky-300 dark:border-sky-950 flex flex-col justify-between transition-colors duration-300">
                                     <div>
-                                        <h4 class="font-retro font-bold text-sky-800 mb-2"><i class="fa-solid fa-music mr-1"></i> 음악 취향</h4>
-                                        <p class="text-sm text-sky-700 font-bold">우효 (OOHYO) - 민들레 🌼</p>
+                                        <h4 class="font-retro font-bold text-sky-800 dark:text-sky-400 mb-2 text-xs md:text-sm"><i class="fa-solid fa-music mr-1"></i> 음악 취향</h4>
+                                        <p class="text-sm text-sky-700 dark:text-sky-300 font-bold">우효 (OOHYO) - 민들레 🌼</p>
                                     </div>
-                                    <p class="text-[11px] text-sky-500 mt-2">감성 촉촉하고 잔잔한 인디음악을 좋아합니다.</p>
+                                    <p class="text-[11px] text-sky-500 dark:text-sky-400 mt-2">감성 촉촉하고 잔잔한 인디음악을 좋아합니다.</p>
                                 </div>
                             </div>
 
                             <!-- Talents -->
-                            <div class="bg-[#FFFDF7] p-4 rounded-lg border-2 border-slate-300">
-                                <h4 class="font-retro font-bold text-slate-700 mb-3"><i class="fa-solid fa-star text-yellow-400 mr-2"></i>제가 잘하는 소중한 장기들</h4>
+                            <div class="bg-[#FFFDF7] dark:bg-slate-900 p-4 rounded-lg border-2 border-slate-300 dark:border-slate-700 transition-colors duration-300">
+                                <h4 class="font-retro font-bold text-slate-700 dark:text-slate-200 mb-3 text-xs md:text-sm"><i class="fa-solid fa-star text-yellow-400 mr-2"></i>제가 잘하는 소중한 장기들</h4>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                    <div class="p-2.5 bg-white rounded border border-slate-200 text-center">
+                                    <div class="p-2.5 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-center">
                                         <span class="text-2xl">🍳</span>
-                                        <p class="font-bold text-xs mt-1 text-slate-700">요리</p>
-                                        <p class="text-[10px] text-slate-500">취사병 출신, 한식조리기능사 보유!</p>
+                                        <p class="font-bold text-xs mt-1 text-slate-700 dark:text-slate-200">요리</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400">취사병 출신, 한식조리기능사 보유!</p>
                                     </div>
-                                    <div class="p-2.5 bg-white rounded border border-slate-200 text-center">
+                                    <div class="p-2.5 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-center">
                                         <span class="text-2xl">🇨🇳</span>
-                                        <p class="font-bold text-xs mt-1 text-slate-700">중국어</p>
-                                        <p class="text-[10px] text-slate-500">HSK 공식 자격증 보유!</p>
+                                        <p class="font-bold text-xs mt-1 text-slate-700 dark:text-slate-200">중국어</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400">HSK 공식 자격증 보유!</p>
                                     </div>
-                                    <div class="p-2.5 bg-white rounded border border-slate-200 text-center">
+                                    <div class="p-2.5 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-center">
                                         <span class="text-2xl">💪</span>
-                                        <p class="font-bold text-xs mt-1 text-slate-700">턱걸이</p>
-                                        <p class="text-[10px] text-slate-500">탄탄한 상체 단련 맨몸운동</p>
+                                        <p class="font-bold text-xs mt-1 text-slate-700 dark:text-slate-200">턱걸이</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400">탄탄한 상체 단련 맨몸운동</p>
                                     </div>
                                 </div>
                             </div>
@@ -462,70 +484,70 @@
                     </section>
 
                     <!-- 7. PERSONALITY -->
-                    <section id="personality" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="personality" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             7. Personality 🤫
                         </span>
                         <div class="mt-6 space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- MBTI Conversion interactive board -->
-                                <div class="p-4 bg-indigo-50 rounded-lg border-2 border-indigo-200 text-center relative overflow-hidden">
-                                    <span class="text-xs text-indigo-400 font-retro">MBTI SHIFT</span>
+                                <div class="p-4 bg-indigo-50 dark:bg-slate-900 rounded-lg border-2 border-indigo-200 dark:border-slate-700 text-center relative overflow-hidden transition-colors duration-300">
+                                    <span class="text-[10px] text-indigo-400 dark:text-indigo-500 font-retro">MBTI SHIFT</span>
                                     <div class="flex items-center justify-center gap-4 my-2">
-                                        <span class="text-lg text-indigo-600 line-through">ENFJ</span>
-                                        <span class="text-xl font-extrabold text-indigo-800">👉 INFJ</span>
+                                        <span class="text-base text-indigo-600 dark:text-indigo-400 line-through">ENFJ</span>
+                                        <span class="text-lg font-extrabold text-indigo-800 dark:text-indigo-300">👉 INFJ</span>
                                     </div>
-                                    <p class="text-[11px] text-indigo-500">외향형에서 점차 사색과 성찰을 사랑하는 인향(INFJ)으로 변모하였습니다.</p>
+                                    <p class="text-[11px] text-indigo-500 dark:text-indigo-400">외향형에서 점차 사색과 성찰을 사랑하는 인향(INFJ)으로 변모하였습니다.</p>
                                 </div>
 
                                 <!-- Scratch card effect for personality keyword -->
-                                <div class="p-4 bg-amber-50 rounded-lg border-2 border-amber-200 text-center flex flex-col justify-center items-center relative overflow-hidden">
-                                    <span class="text-xs text-amber-500 font-retro">CHARACTER KEYWORD</span>
+                                <div class="p-4 bg-amber-50 dark:bg-slate-900 rounded-lg border-2 border-amber-200 dark:border-slate-700 text-center flex flex-col justify-center items-center relative overflow-hidden transition-colors duration-300">
+                                    <span class="text-[10px] text-amber-500 dark:text-amber-400 font-retro">CHARACTER KEYWORD</span>
                                     <div class="relative mt-2 w-full max-w-[200px]" onclick="revealSecret(this)">
                                         <!-- Scratch-off Layer -->
-                                        <div id="scratch-overlay" class="absolute inset-0 bg-slate-400 hover:bg-slate-500 text-white text-xs font-bold flex items-center justify-center rounded cursor-pointer transition select-none z-10 border border-slate-600">
+                                        <div id="scratch-overlay" class="absolute inset-0 bg-slate-400 dark:bg-slate-700 hover:bg-slate-500 text-white text-xs font-bold flex items-center justify-center rounded cursor-pointer transition select-none z-10 border border-slate-600 dark:border-slate-500">
                                             클릭하여 성격 확인 🔒
                                         </div>
-                                        <div class="bg-white py-2 rounded border border-amber-300 font-bold text-amber-800">
+                                        <div class="bg-white dark:bg-slate-800 py-2 rounded border border-amber-300 dark:border-slate-700 font-bold text-amber-800 dark:text-amber-300 text-xs">
                                             🤫 비밀 입니다 !
                                         </div>
                                     </div>
-                                    <p class="text-[10px] text-amber-600 mt-2">저의 은밀한 성격 키워드는 아직 비공개!</p>
+                                    <p class="text-[10px] text-amber-600 dark:text-amber-400 mt-2">저의 은밀한 성격 키워드는 아직 비공개!</p>
                                 </div>
                             </div>
                         </div>
                     </section>
 
                     <!-- 8. CONTACT (연락처) -->
-                    <section id="contact" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#A8D8FF] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="contact" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#A8D8FF] dark:bg-sky-950 text-slate-800 dark:text-slate-200 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             8. Contact 📞
                         </span>
                         
                         <!-- Beautiful retro identity card -->
-                        <div class="mt-6 bg-[#FFFDF7] p-6 rounded-xl border-4 border-dashed border-slate-300 relative">
-                            <div class="absolute top-2 right-4 text-xs font-retro text-slate-300">PERSONAL CARD</div>
+                        <div class="mt-6 bg-[#FFFDF7] dark:bg-slate-900 p-4 md:p-6 rounded-xl border-4 border-dashed border-slate-300 dark:border-slate-700 relative transition-colors duration-300">
+                            <div class="absolute top-2 right-4 text-[10px] font-retro text-slate-300 dark:text-slate-600">PERSONAL CARD</div>
                             
-                            <div class="flex flex-col md:flex-row gap-6 items-center">
-                                <div class="text-5xl">💌</div>
-                                <div class="flex-1 space-y-3">
+                            <div class="flex flex-col md:flex-row gap-4 md:gap-6 items-center md:items-start">
+                                <div class="text-4xl md:text-5xl my-2">💌</div>
+                                <div class="flex-1 space-y-3 w-full text-center md:text-left">
                                     <div>
-                                        <p class="text-xs text-slate-400 font-retro">E-MAIL</p>
-                                        <div class="flex items-center gap-2">
-                                            <span class="font-mono text-sm text-slate-800">dodoking99@naver.com</span>
-                                            <button onclick="copyToClipboard('dodoking99@naver.com')" class="text-xs text-sky-600 hover:underline">복사</button>
+                                        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-retro">E-MAIL</p>
+                                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 break-all">
+                                            <span class="font-mono text-xs md:text-sm text-slate-800 dark:text-slate-200">dodoking99@naver.com</span>
+                                            <button onclick="copyToClipboard('dodoking99@naver.com')" class="text-[11px] text-sky-600 dark:text-amber-400 hover:underline font-bold">복사</button>
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="text-xs text-slate-400 font-retro">PHONE</p>
-                                        <div class="flex items-center gap-2">
-                                            <span class="font-mono text-sm text-slate-800">010-8806-6041</span>
-                                            <button onclick="copyToClipboard('010-8806-6041')" class="text-xs text-sky-600 hover:underline">복사</button>
+                                        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-retro">PHONE</p>
+                                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 break-all">
+                                            <span class="font-mono text-xs md:text-sm text-slate-800 dark:text-slate-200">010-8806-6041</span>
+                                            <button onclick="copyToClipboard('010-8806-6041')" class="text-[11px] text-sky-600 dark:text-amber-400 hover:underline font-bold">복사</button>
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="text-xs text-slate-400 font-retro">INSTAGRAM</p>
-                                        <p class="text-sm text-slate-800">개인 문의 바랍니다 👁️</p>
+                                        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-retro">INSTAGRAM</p>
+                                        <p class="text-xs md:text-sm text-slate-800 dark:text-slate-200 font-semibold">개인 문의 바랍니다 👁️</p>
                                     </div>
                                 </div>
                             </div>
@@ -533,66 +555,66 @@
                     </section>
 
                     <!-- 9. 오늘의 TMI -->
-                    <section id="tmi" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-[#FFD966] text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="tmi" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             9. 오늘의 TMI 👀
                         </span>
-                        <div class="mt-6 p-4 bg-[#FFFDF7] rounded-lg border-2 border-slate-300">
+                        <div class="mt-6 p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 transition-colors duration-300">
                             <div class="flex items-start gap-3">
-                                <span class="text-2xl">🤫</span>
+                                <span class="text-xl md:text-2xl flex-shrink-0">🤫</span>
                                 <div>
-                                    <h4 class="font-bold text-sm text-slate-800">이것은 극비사항입니다...</h4>
-                                    <p class="text-slate-600 text-sm mt-1 leading-relaxed">
-                                        "사실... 저 정말로 <strong class="text-[#A8D8FF] bg-slate-800 px-1 rounded">SSAFY</strong>에 합격할 수 있을지 상상도 하지 못했답니다! 🎉"
+                                    <h4 class="font-bold text-xs md:text-sm text-slate-800 dark:text-slate-200">이것은 극비사항입니다...</h4>
+                                    <p class="text-slate-600 dark:text-slate-300 text-xs md:text-sm mt-1 leading-relaxed">
+                                        "사실... 저 정말로 <strong class="text-[#A8D8FF] dark:text-amber-400 bg-slate-800 dark:bg-slate-950 px-1 rounded whitespace-nowrap">SSAFY</strong>에 합격할 수 있을지 상상도 하지 못했답니다! 🎉"
                                     </p>
-                                    <p class="text-xs text-slate-400 mt-2">지금은 너무나도 영광스럽게 학습 중!</p>
+                                    <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-2 font-retro">지금은 너무나도 영광스럽게 학습 중!</p>
                                 </div>
                             </div>
                         </div>
                     </section>
 
                     <!-- 10. AI MINIROOM LOUNGE (Gemini API Integration) -->
-                    <section id="ai-lounge" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
+                    <section id="ai-lounge" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
                         <div class="flex justify-between items-center flex-wrap gap-2">
                             <span class="font-retro bg-indigo-400 text-white px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                                 10. AI 미니룸 쉼터 🤖
                             </span>
-                            <span class="text-[10px] text-indigo-500 font-retro animate-pulse">Powered by Gemini AI</span>
+                            <span class="text-[9px] text-indigo-500 dark:text-indigo-300 font-retro animate-pulse">Powered by Gemini AI</span>
                         </div>
 
-                        <p class="text-xs text-slate-500 font-retro mt-3">
+                        <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 font-retro mt-3">
                             도도킹의 프로필을 학습한 AI 아바타와 대화하거나, 전설의 '물음표 살인마' 모드를 체험해보세요!
                         </p>
 
                         <!-- AI Mode Selector Tabs -->
                         <div class="grid grid-cols-2 gap-2 mt-4">
-                            <button onclick="switchAIMode('chat')" id="tab-ai-chat" class="py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#EBF5FF] text-slate-800 font-bold shadow-[2px_2px_0px_#333] transition-all hover:-translate-y-0.5 active:translate-y-0 active:shadow-none">
+                            <button onclick="switchAIMode('chat')" id="tab-ai-chat" class="py-2 px-1 text-[10px] md:text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#EBF5FF] text-slate-800 font-bold shadow-[2px_2px_0px_#333] transition-all hover:-translate-y-0.5 active:translate-y-0 active:shadow-none">
                                 💬 일촌 대화 나누기
                             </button>
-                            <button onclick="switchAIMode('murderer')" id="tab-ai-murderer" class="py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFFDF7] text-slate-500 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] transition-all hover:-translate-y-0.5">
+                            <button onclick="switchAIMode('murderer')" id="tab-ai-murderer" class="py-2 px-1 text-[10px] md:text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFFDF7] text-slate-500 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] transition-all hover:-translate-y-0.5">
                                 ❓ 물음표 살인마 체험
                             </button>
                         </div>
 
                         <!-- Chat Screen Interface -->
-                        <div class="mt-4 bg-[#1E293B] rounded-lg border-4 border-slate-700 p-4 text-slate-200 font-mono text-xs flex flex-col h-[320px]">
+                        <div class="mt-4 bg-[#1E293B] rounded-lg border-4 border-slate-700 p-3 md:p-4 text-slate-200 font-mono text-xs flex flex-col h-[340px]">
                             <!-- Screen Top Status Bar -->
                             <div class="flex justify-between items-center border-b border-slate-600 pb-2 mb-3">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-                                    <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
                                 </div>
-                                <span id="ai-screen-title" class="text-[10px] text-slate-400 font-retro">DODO_BOT_v1.0.exe</span>
-                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-900 text-indigo-300 font-bold uppercase" id="ai-status-badge">ONLINE</span>
+                                <span id="ai-screen-title" class="text-[9px] md:text-[10px] text-slate-400 font-retro truncate max-w-[150px] md:max-w-none">DODO_BOT_v1.0.exe</span>
+                                <span class="text-[8px] px-1.5 py-0.5 rounded bg-indigo-900 text-indigo-300 font-bold uppercase" id="ai-status-badge">ONLINE</span>
                             </div>
 
                             <!-- Chat Messages Log (Scrollable) -->
-                            <div id="ai-chat-log" class="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin scrollbar-thumb-slate-600">
+                            <div id="ai-chat-log" class="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin scrollbar-thumb-slate-600 text-[11px] md:text-xs">
                                 <!-- Welcomes/Intro messages will be generated on load -->
                             </div>
 
-                            <!-- Fast-Track Prompt Recommendations (Buttons to click and ask instantly) -->
+                            <!-- Fast-Track Prompt Recommendations -->
                             <div class="mt-2 pt-2 border-t border-slate-700 flex gap-1.5 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar" id="ai-quick-prompts">
                                 <!-- Dynamically loaded based on mode -->
                             </div>
@@ -600,7 +622,7 @@
                             <!-- User Input Area -->
                             <div class="mt-2 flex gap-2">
                                 <input type="text" id="ai-user-input" placeholder="아바타에게 할 말을 입력해보삼..." onkeypress="handleAIKeyPress(event)" class="flex-1 bg-slate-900 border border-slate-600 rounded px-2.5 py-2 text-xs text-white focus:outline-none focus:border-indigo-400 placeholder-slate-500">
-                                <button onclick="sendToAI()" id="ai-send-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-retro px-3.5 rounded border border-slate-600 shadow-[2px_2px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center">
+                                <button onclick="sendToAI()" id="ai-send-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-retro px-3.5 rounded border border-slate-600 shadow-[2px_2px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center text-xs">
                                     전송 🚀
                                 </button>
                             </div>
@@ -608,24 +630,24 @@
                     </section>
 
                     <!-- 11. GUESTBOOK (방명록 댓글) -->
-                    <section id="guestbook" class="bg-white p-6 rounded-xl border-4 border-slate-700 shadow-[4px_4px_0px_#333]">
-                        <span class="font-retro bg-rose-300 text-slate-800 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
+                    <section id="guestbook" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
+                        <span class="font-retro bg-rose-300 dark:bg-rose-950 text-slate-800 dark:text-slate-200 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm">
                             11. Guestbook 💬
                         </span>
                         
                         <div class="mt-6 space-y-4">
-                            <h3 class="font-retro font-bold text-slate-700 border-b pb-2">일촌들이 남기는 정겨운 한마디</h3>
+                            <h3 class="font-retro font-bold text-slate-700 dark:text-slate-200 border-b dark:border-slate-700 pb-2 text-sm md:text-base">일촌들이 남기는 정겨운 한마디</h3>
                             
                             <!-- Guestbook Form -->
-                            <form id="comment-form" onsubmit="addComment(event)" class="bg-[#FFFDF7] p-4 rounded-lg border-2 border-slate-300 space-y-3">
+                            <form id="comment-form" onsubmit="addComment(event)" class="bg-[#FFFDF7] dark:bg-slate-900 p-4 rounded-lg border-2 border-slate-300 dark:border-slate-700 space-y-3 transition-colors duration-300">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-600 mb-1">일촌 닉네임</label>
-                                        <input type="text" id="comment-author" placeholder="이름 또는 닉네임" required class="w-full text-sm p-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]">
+                                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">일촌 닉네임</label>
+                                        <input type="text" id="comment-author" placeholder="이름 또는 닉네임" required class="w-full text-xs md:text-sm p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-600 mb-1">아바타 아이콘</label>
-                                        <select id="comment-avatar" class="w-full text-sm p-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]">
+                                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">아바타 아이콘</label>
+                                        <select id="comment-avatar" class="w-full text-xs md:text-sm p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]">
                                             <option value="😃">😃 기본 스마일</option>
                                             <option value="💻">💻 개발 파트너</option>
                                             <option value="🍗">🍗 치킨 마니아</option>
@@ -636,11 +658,11 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1">한마디 평</label>
-                                    <textarea id="comment-content" placeholder="김동민님에게 따뜻한 일촌 평이나 응원을 남겨주세요!" required rows="2" class="w-full text-sm p-2 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]"></textarea>
+                                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">한마디 평</label>
+                                    <textarea id="comment-content" placeholder="김동민님에게 따뜻한 일촌 평이나 응원을 남겨주세요!" required rows="2" class="w-full text-xs md:text-sm p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#A8D8FF]"></textarea>
                                 </div>
                                 <div class="text-right">
-                                    <button type="submit" class="bg-[#A8D8FF] hover:bg-sky-400 text-slate-800 font-retro text-xs font-bold px-4 py-2 rounded pixel-border-sm transition">
+                                    <button type="submit" class="bg-[#A8D8FF] dark:bg-sky-900 hover:bg-sky-400 dark:hover:bg-sky-800 text-slate-800 dark:text-slate-100 font-retro text-xs font-bold px-4 py-2 rounded pixel-border-sm transition">
                                         남기기 ✍️
                                     </button>
                                 </div>
@@ -658,8 +680,8 @@
         </div>
     </div>
 
-    <!-- Floating Toast Notification System (Replaces Alert) -->
-    <div id="toast-box" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-2.5 rounded-lg shadow-xl translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-2 border border-slate-700 text-sm">
+    <!-- Floating Toast Notification System -->
+    <div id="toast-box" class="fixed bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0 bg-slate-800 dark:bg-slate-900 text-white px-4 py-2.5 rounded-lg shadow-xl translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-2 border border-slate-700 text-xs md:text-sm w-[90%] sm:w-auto justify-center sm:justify-start">
         <span id="toast-icon">✨</span> <span id="toast-msg">메시지 내용</span>
     </div>
 
@@ -706,6 +728,40 @@
             tmi: "사실 SSAFY(삼성 청년 SW 아카데미)에 합격할 수 있을지 본인도 전혀 몰랐다가 기적처럼 붙어서 아주 기뻐하며 열심히 수련하는 중임"
         };
 
+        // Initialize Theme from localStorage or default to Light Mode
+        function initTheme() {
+            const savedTheme = localStorage.getItem('dodo_theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark');
+                updateThemeButton(true);
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.body.classList.remove('dark');
+                updateThemeButton(false);
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            document.body.classList.toggle('dark', isDark);
+            localStorage.setItem('dodo_theme', isDark ? 'dark' : 'light');
+            updateThemeButton(isDark);
+            showToast(isDark ? "🌙" : "☀️", isDark ? "레트로 야간 모드로 전환하삼!" : "아늑한 주간 모드로 전환하삼!");
+        }
+
+        function updateThemeButton(isDark) {
+            const btnIcon = document.getElementById('theme-btn-icon');
+            const btnText = document.getElementById('theme-btn-text');
+            if (isDark) {
+                btnIcon.textContent = "🌙";
+                btnText.textContent = "야간 모드";
+            } else {
+                btnIcon.textContent = "☀️";
+                btnText.textContent = "주간 모드";
+            }
+        }
+
         // System instructions for Gemini model
         const systemPrompts = {
             chat: `당신은 싸이월드 미니홈피의 주인인 20대 후반의 훈남 청년 '김동민(dodo)'의 AI 아바타 인형입니다.
@@ -742,6 +798,7 @@
 
         // On Load initialization
         window.onload = function() {
+            initTheme();
             initVisitorCounter();
             loadComments();
             switchAIMode('chat'); // Initialize AI screen with chat mode
@@ -759,8 +816,8 @@
 
             // Toggle CSS classes for active tabs
             if (mode === 'chat') {
-                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#EBF5FF] text-slate-800 font-bold shadow-[2px_2px_0px_#333] transition-all";
-                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFFDF7] text-slate-500 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
+                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#EBF5FF] dark:bg-sky-950 text-slate-800 dark:text-slate-100 font-bold shadow-[2px_2px_0px_#333] dark:shadow-[2px_2px_0px_#1e293b] transition-all";
+                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFFDF7] dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
                 screenTitle.textContent = "DODO_AVATAR_CHAT.exe";
                 statusBadge.textContent = "BUDDY";
                 statusBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-sky-900 text-sky-300 font-bold uppercase";
@@ -776,8 +833,8 @@
                     </div>
                 `;
             } else {
-                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFD966] text-slate-800 font-bold shadow-[2px_2px_0px_#333] transition-all";
-                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 bg-[#FFFDF7] text-slate-500 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
+                murdererTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 font-bold shadow-[2px_2px_0px_#333] dark:shadow-[2px_2px_0px_#1e293b] transition-all";
+                chatTab.className = "py-2 px-3 text-xs font-retro rounded border-2 border-slate-700 dark:border-slate-600 bg-[#FFFDF7] dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all";
                 screenTitle.textContent = "QUESTION_MURDERER_MODE.bat";
                 statusBadge.textContent = "DANGER";
                 statusBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-rose-900 text-rose-300 font-bold uppercase animate-pulse";
@@ -1025,16 +1082,16 @@
             
             comments.slice().reverse().forEach(comment => {
                 const commentDiv = document.createElement('div');
-                commentDiv.className = "p-3 bg-[#EBF5FF] rounded-lg border-2 border-slate-300 flex items-start gap-3 relative group";
+                commentDiv.className = "p-3 bg-[#EBF5FF] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 flex items-start gap-3 relative group transition-colors duration-300";
                 
                 commentDiv.innerHTML = `
-                    <div class="text-xl bg-white p-1 rounded-full border border-slate-200 shadow-sm">${comment.avatar}</div>
+                    <div class="text-xl bg-white dark:bg-slate-800 p-1 rounded-full border border-slate-200 dark:border-slate-750 shadow-sm">${comment.avatar}</div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
-                            <span class="font-bold text-xs text-slate-700">${comment.author}</span>
+                            <span class="font-bold text-xs text-slate-700 dark:text-slate-200">${comment.author}</span>
                             <span class="text-[10px] text-slate-400 font-mono">${comment.date}</span>
                         </div>
-                        <p class="text-xs text-slate-600 mt-1">${comment.content}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">${comment.content}</p>
                     </div>
                     <button onclick="deleteComment(${comment.id})" class="absolute right-2 bottom-2 text-[10px] text-rose-500 hover:underline opacity-0 group-hover:opacity-100 transition">삭제</button>
                 `;
