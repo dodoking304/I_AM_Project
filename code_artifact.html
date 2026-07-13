@@ -106,6 +106,20 @@
             color: #fbbf24; /* amber-400 */
         }
 
+        .hover-text-grow-center {
+            display: inline-block;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: fit-content;
+            transform-origin: center center;
+        }
+        .hover-text-grow-center:hover {
+            transform: scale(1.05);
+            color: #3b82f6; /* sky-500 */
+        }
+        .dark .hover-text-grow-center:hover {
+            color: #fbbf24; /* amber-400 */
+        }
+
         /* Mouse Star Particles */
         .star-particle {
             position: fixed;
@@ -277,12 +291,12 @@
                             <div class="absolute -top-10 -left-10 w-32 h-32 bg-[#A8D8FF] dark:bg-sky-900 rounded-full opacity-30 blur-xl"></div>
                             <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-[#FFD966] dark:bg-amber-500 rounded-full opacity-30 blur-xl"></div>
                             
-                            <h2 class="font-retro text-xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 mb-4 tracking-wider leading-relaxed hover-text-grow">
+                            <h2 class="font-retro text-xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 mb-4 tracking-wider leading-relaxed hover-text-grow-center block mx-auto">
                                 안녕하세요!<br>
-                                <span class="bg-[#A8D8FF] dark:bg-sky-900 px-2 inline-block my-1 rounded">김동민</span> 입니다.<br>
-                                영어 이름은 <span class="bg-[#FFD966] dark:bg-amber-500 px-2 inline-block my-1 rounded text-slate-900">dodo</span> 입니다!
+                                김동민 입니다.<br>
+                                영어 이름은 dodo입니다!
                             </h2>
-                            <p class="text-slate-500 dark:text-slate-400 font-retro text-xs md:text-sm hover-text-grow">#dodoking #대만 #옷 🐾</p>
+                            <p class="text-slate-500 dark:text-slate-400 font-retro text-xs md:text-sm hover-text-grow-center block mx-auto">#dodoking #대만 #옷 🐾</p>
                         </div>
                     </section>
 
@@ -386,21 +400,21 @@
 
                     <!-- 4. GOAL -->
                     <section id="goal" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
-                        <span class="font-retro bg-[#A8D8FF] dark:bg-sky-950 text-slate-800 dark:text-slate-200 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm hover-text-grow">
-                            4. Goal 🚀
+                        <span class="font-retro bg-[#A8D8FF] dark:bg-sky-950 text-slate-800 dark:text-slate-200 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm hover-text-grow-center block mx-auto w-fit">
+                            4. Goal
                         </span>
                         <div class="mt-6 p-4 md:p-6 bg-gradient-to-r from-yellow-100 via-sky-100 to-indigo-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center transition-colors duration-300">
-                            <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-retro mb-2 hover-text-grow">My Final Destination</p>
-                            <h3 class="text-lg md:text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-normal hover-text-grow">
+                            <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-retro mb-2 hover-text-grow-center block mx-auto">MY FINAL DESTINATION</p>
+                            <h3 class="text-lg md:text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-normal hover-text-grow-center block mx-auto">
                                 행복한 사회를 만들고 싶은 사업가
                             </h3>
-                            <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 mt-4 font-retro hover-text-grow">기술과 따뜻한 영향력으로 세상을 조금 더 밝게 물들이겠습니다.</p>
+                            <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300 mt-4 font-retro hover-text-grow-center block mx-auto">기술과 따뜻한 영향력으로 세상을 조금 더 밝게 물들이겠습니다.</p>
                         </div>
                     </section>
 
                     <!-- 5. ACHIEVEMENTS (나의 업적) -->
                     <section id="achievements" class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl border-4 border-slate-700 dark:border-slate-600 shadow-[4px_4px_0px_#333] dark:shadow-[4px_4px_0px_#1e293b] transition-colors duration-300">
-                        <span class="font-retro bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm hover-text-grow">
+                        <span class="font-retro bg-[#FFD966] dark:bg-amber-500 text-slate-800 dark:text-slate-950 px-3 py-1 text-xs font-bold rounded-full pixel-border-sm hover-text-grow-center block mx-auto w-fit">
                             5. Achievements 🏆
                         </span>
                         <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -409,8 +423,9 @@
                             <div class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
                                 <div>
                                     <span class="text-4xl">💣</span>
-                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base hover-text-grow">크아 레벨 260</h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 hover-text-grow">크아 서버 종료 8월 13일 전까지 크아 하실분 모집★</p>
+                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base hover-text-grow-center block mx-auto">크아 레벨 260</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 hover-text-grow-center block mx-auto">크아 서버 종료 날짜 : 8월 13일</p>
+                                    <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 font-semibold hover-text-grow-center block mx-auto">같이 크아 할사람 모집합니다</p>
                                 </div>
                                 <div class="mt-4 flex flex-col items-center gap-1.5">
                                     <button onclick="incrementCrazyArcade()" class="bg-[#FFD966] hover:bg-yellow-400 text-slate-900 font-retro text-[10px] font-bold px-2 py-1 rounded pixel-border-sm flex items-center gap-1 active:scale-95 transition">
@@ -424,27 +439,27 @@
                             <div class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
                                 <div>
                                     <span class="text-4xl">🔥</span>
-                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base hover-text-grow">숏폼 최대 95만뷰</h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 hover-text-grow">CapCut을 이용한 트렌디한 편집으로 달성한 엄청난 도달율</p>
+                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base hover-text-grow-center block mx-auto">숏폼 최대 95만뷰</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 hover-text-grow-center block mx-auto">CapCut을 이용한 트렌디한 편집으로 달성한 엄청난 도달율</p>
                                 </div>
                                 <div class="mt-4 flex flex-col items-center gap-1.5">
-                                    <span class="text-[10px] bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-300 px-2.5 py-1 rounded font-bold leading-none hover-text-grow">
+                                    <span class="text-[10px] bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-300 px-2.5 py-1 rounded font-bold leading-none hover-text-grow-center block mx-auto">
                                         (숏폼 찾을시 선물 🎁)
                                     </span>
-                                    <span class="text-[10px] bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 px-2 py-0.5 rounded font-bold hover-text-grow">POPULAR</span>
+                                    <span class="text-[10px] bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 px-2 py-0.5 rounded font-bold hover-text-grow-center block mx-auto">POPULAR</span>
                                 </div>
                             </div>
 
                             <!-- Achievement 3: LOL Zilean Master -->
                             <div class="p-4 bg-[#FFFDF7] dark:bg-slate-900 rounded-lg border-2 border-slate-300 dark:border-slate-700 text-center flex flex-col justify-between hover:-translate-y-1 transition duration-200">
-                                <div>
+                                <div class="flex flex-col items-center">
                                     <span class="text-4xl">⏰</span>
-                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base hover-text-grow">LOL 질리언 장인</h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 hover-text-grow">단일챔프로 플래티넘 까지</p>
-                                    <span class="text-xs font-bold text-sky-600 dark:text-sky-400 block mt-1 hover-text-grow">ID : dodoking</span>
+                                    <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base hover-text-grow-center block mx-auto">LOL 질리언 장인</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 hover-text-grow-center block mx-auto">단일챔프로 플래티넘 까지</p>
+                                    <span class="text-xs font-bold text-sky-600 dark:text-sky-450 block mt-1 hover-text-grow-center mx-auto text-center">ID : dodoking</span>
                                 </div>
-                                <div class="mt-4">
-                                    <span class="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2.5 py-1 rounded font-bold leading-none hover-text-grow">
+                                <div class="mt-4 flex justify-center">
+                                    <span class="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2.5 py-1 rounded font-bold leading-none hover-text-grow-center block mx-auto">
                                         (지금은 안함..)
                                     </span>
                                 </div>
