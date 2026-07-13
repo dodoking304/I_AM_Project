@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Web Fonts for Retro Pixel vibe and clean body text -->
     <link href="https://fonts.googleapis.com/css2?family=DungGeunMo&family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Pretendard', sans-serif;
@@ -88,6 +89,26 @@
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+
+        /* Mouse Star Particles */
+        .star-particle {
+            position: fixed;
+            pointer-events: none;
+            font-size: 14px;
+            z-index: 9999;
+            animation: fallFade 0.8s forwards ease-out;
+            user-select: none;
+        }
+        @keyframes fallFade {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(40px) rotate(180deg) scale(0.3);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -191,7 +212,7 @@
                         <div class="my-4 py-3 border-y-2 border-dashed border-slate-200 dark:border-slate-700">
                             <p class="text-xs text-slate-500 dark:text-slate-400 font-retro mb-1">Status Message</p>
                             <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                "가끔씩 물음표 살인마가 되🔪"
+                                "가끔씩 물음표 살인마가 되 🔪"
                             </p>
                         </div>
 
@@ -267,7 +288,7 @@
                                     </ul>
                                 </div>
                                 <div class="mt-4 p-2 bg-yellow-50 dark:bg-slate-800 rounded text-xs text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-slate-700">
-                                    💡 "궁금한 건 참을 수 없어요! 항상 원리를 파고듭니다."
+                                    💡 "궁금한게 너무 많아요 질문이 너무 많아도 싫어하시면 안돼요! ."
                                 </div>
                             </div>
 
@@ -374,10 +395,13 @@
                                 <div>
                                     <span class="text-4xl">💣</span>
                                     <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">크아 레벨 260</h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Crazyarcade 고인물의 품격,물풍선 마스터 클래스</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">크아 서버 종료 8월 13일 전까지 크아 하실분 모집★</p>
                                 </div>
-                                <div class="mt-4">
-                                    <span class="text-[10px] bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 px-2 py-1 rounded font-bold">LEGENDARY</span>
+                                <div class="mt-4 flex flex-col items-center gap-1.5">
+                                    <button onclick="incrementCrazyArcade()" class="bg-[#FFD966] hover:bg-yellow-400 text-slate-900 font-retro text-[10px] font-bold px-2 py-1 rounded pixel-border-sm flex items-center gap-1 active:scale-95 transition">
+                                        <span>🤚 같이하기</span>
+                                        <span id="crazy-count" class="bg-slate-900 text-white rounded px-1 min-w-[12px]">0</span>
+                                    </button>
                                 </div>
                             </div>
 
@@ -401,7 +425,8 @@
                                 <div>
                                     <span class="text-4xl">⏰</span>
                                     <h4 class="font-retro font-bold text-slate-800 dark:text-slate-100 mt-2 text-sm md:text-base">LOL 질리언 장인</h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">단일챔프로 플레티넘 까지</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">단일챔프로 플래티넘 까지</p>
+                                    <span class="text-xs font-bold text-sky-600 dark:text-sky-400 block mt-1">ID : dodoking</span>
                                 </div>
                                 <div class="mt-4">
                                     <span class="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2.5 py-1 rounded font-bold leading-none">
@@ -516,7 +541,7 @@
                                         <span class="text-lg font-extrabold text-indigo-800 dark:text-indigo-300">👉 INFJ</span>
                                     </div>
                                     <p class="text-[11px] text-indigo-500 dark:text-indigo-400">외향형에서 점차 사색과 성찰을 사랑하는 인향(INFJ)으로 변모하였습니다.</p>
-                                </div>
+                                }</div>
 
                                 <!-- Scratch card effect for personality keyword -->
                                 <div class="p-4 bg-amber-50 dark:bg-slate-900 rounded-lg border-2 border-amber-200 dark:border-slate-700 text-center flex flex-col justify-center items-center relative overflow-hidden transition-colors duration-300">
@@ -717,7 +742,7 @@
             name: "김동민 (영어이름: dodo, 닉네임: dodoking)",
             location: "광주광역시 (전남 광주)",
             mbti: "ENFJ에서 최근 INFJ로 변모 (사색과 성찰을 좋아하는 유형)",
-            statusMessage: "가끔씩 물음표 살인마가 되 ❓🔪 (궁금한 것은 끝까지 알아내야 함)",
+            statusMessage: "가끔씩 물음표 살인마가 되 🔪 (궁금한 것은 끝까지 알아내야 함)",
             skills: [
                 "AutoCAD (건축 도면 설계 및 신속한 수정 전문가)",
                 "BIM (3D, 4D 모델링 및 풍부한 건축 정보 데이터 통합 마스터)",
@@ -727,9 +752,9 @@
             ],
             goal: "행복한 사회를 만들고 싶은 사업가",
             achievements: [
-                "크레이지아케이드 레벨 260 달성 (고인물 중의 고인물)",
+                "크레이지아케이드 레벨 260 달성 (고인물 중의 고인물, 8월 13일 전 서버 종료 전 동료 구함)",
                 "CapCut 숏폼 최대 조회수 95만회 기록 (누군가 숏폼을 찾아내면 선물 증정 예정)",
-                "LOL 질리언 장인 (단일챔프로 플레티넘까지 달성했으나 지금은 안함)"
+                "LOL 질리언 장인 (단일챔프로 플래티넘까지, 계정명 ID: dodoking)"
             ],
             favorites: {
                 chickenBrands: ["교촌치킨 레드콤보", "BBQ 황금올리브", "굽네치킨 고추바사삭", "멕시칸 닭강정"],
@@ -780,7 +805,6 @@
             }
         }
 
-        // System instructions for Gemini model
         const systemPrompts = {
             chat: `당신은 싸이월드 미니홈피의 주인인 20대 후반의 훈남 청년 '김동민(dodo)'의 AI 아바타 인형입니다.
 프로필 정보: ${JSON.stringify(dodoProfileContext)}
@@ -803,7 +827,7 @@
             chat: [
                 "도도킹님, 자기소개 한 판 부탁하삼! 🙌",
                 "최애 치킨 브랜드를 다 읊어주삼 🍗",
-                "국밥 3공기 진짜 실화임? 🍲",
+                "크아 레벨 260 진짜임? 모집은 왜 함? 💣",
                 "싸피(SSAFY) 생활은 어떰? 💻",
                 "파워포인트도 잘 하신다면서요? 📊"
             ],
@@ -822,7 +846,67 @@
             switchAIMode('chat'); // Initialize AI screen with chat mode
             initBgParticles();   // Start subtle background particles
             initScrollIndicator(); // Start scroll progress gauge tracking
+            initMouseStarTrail(); // Start magical star trail effect
+            initCrazyCounter();  // Initialize local Crazy Arcade Joiner Counter
         };
+
+        // Star Trail interactive logic
+        function initMouseStarTrail() {
+            let lastStarTime = 0;
+            const starEmojis = ['⭐', '✨', '🌟', '💫'];
+
+            document.addEventListener('mousemove', function(e) {
+                const now = Date.now();
+                // Throttle star generation to keep it very smooth and low-resource
+                if (now - lastStarTime < 65) return;
+                lastStarTime = now;
+
+                const star = document.createElement('div');
+                star.className = 'star-particle';
+                star.textContent = starEmojis[Math.floor(Math.random() * starEmojis.length)];
+                
+                // Adjust position so it originates from the center of the cursor
+                star.style.left = (e.clientX - 7) + 'px';
+                star.style.top = (e.clientY - 7) + 'px';
+                
+                // Slight randomized offset for falling direction
+                const randomXShift = (Math.random() * 20 - 10) + 'px';
+                star.style.setProperty('--x-shift', randomXShift);
+
+                document.body.appendChild(star);
+
+                // Safely remove the element once animation finishes
+                setTimeout(() => {
+                    star.remove();
+                }, 800);
+            });
+        }
+
+        // Crazy Arcade join count local simulation
+        function initCrazyCounter() {
+            let count = localStorage.getItem('dodo_crazy_join_count');
+            if (!count) {
+                count = 7; // Starter mock recruits
+                localStorage.setItem('dodo_crazy_join_count', count);
+            }
+            document.getElementById('crazy-count').textContent = count;
+        }
+
+        function incrementCrazyArcade() {
+            let count = parseInt(localStorage.getItem('dodo_crazy_join_count')) || 7;
+            count++;
+            localStorage.setItem('dodo_crazy_join_count', count);
+            document.getElementById('crazy-count').textContent = count;
+            
+            // Random cute response toasts
+            const toasts = [
+                "오! 크아 한 번 가봅시삼! 💣",
+                "dodoking 친추 부탁하삼! 😉",
+                "물풍선 들고 대기 중이라능! 🤚",
+                "든든한 크아 동지가 한 명 더 추가됨! ★"
+            ];
+            showToast("🎮", toasts[Math.floor(Math.random() * toasts.length)]);
+        }
 
         // Responsive scroll progress gauge controller
         function initScrollIndicator() {
@@ -1094,7 +1178,7 @@
 
         // Exponential Backoff implementation for calling the LLM via Gemini API
         async function callGeminiAPI(userQuery, systemPrompt, retries = 3, delay = 1000) {
-            const apiKey = ""; // Left empty as Canvas runtime automatically injects API key
+            const apiKey = ""; // Injected automatically by the sandbox runtime environment
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
             const payload = {
@@ -1173,22 +1257,6 @@
                 showToast("🎵", "BGM 재생 중: 우효 - 민들레");
             }
             isPlaying = !isPlaying;
-        }
-
-        // Bowl Stacking Interaction
-        let bowlCount = 3;
-        function stackGukbap() {
-            if(bowlCount >= 10) {
-                showToast("🍲", "이미 배가 터질 것 같아요! 10공기 돌파!");
-                return;
-            }
-            bowlCount++;
-            const container = document.getElementById('bowls-container');
-            const bowlSpan = document.createElement('span');
-            bowlSpan.textContent = "🍚";
-            bowlSpan.className = "text-lg animate-bounce";
-            container.appendChild(bowlSpan);
-            showToast("🍲", `김동민님이 국밥 ${bowlCount}공기째 흡입 중!`);
         }
 
         // Reveal character secret card
